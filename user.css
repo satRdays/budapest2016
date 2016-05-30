@@ -103,3 +103,37 @@ section {
     width: 64px;
     margin-right: 25px;
 }
+
+
+div.speaker {
+    width: 49%;
+    text-align: center;
+    display: inline-block;
+}
+div.speaker .speaker-photo {
+    width: 40%;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+div.speaker .speaker-photo img {
+    display: block;
+    margin: 0 auto;
+    height: auto;
+    width: 100%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+div.speaker .speaker-name {
+    padding-top: 10px;
+    font-size: 2em;
+}
+div.speaker .speaker-affiliation {
+    padding-top: 10px;
+    font-size: 1.5em;
+}
