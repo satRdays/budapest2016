@@ -1,16 +1,16 @@
 #footer {
-	 height: 60px;
-	 background-color: #f5f5f5;
+    height: 60px;
+    background-color: #f5f5f5;
 }
 
 .credit {
-   margin-top: 20px;
-   text-align:center
+    margin-top: 20px;
+    text-align:center
 }
 
 .thumbnail {
-	float: right;
-	margin: 15px;	
+    float: right;
+    margin: 15px;	
 }
 
 .sidebar {
@@ -18,19 +18,19 @@
 }
 
 .subhead {
-	background-image: url('images/budapest.jpg');
-	background-repeat: no-repeat;
-	background-position: center;
-	padding: 45px;
-	color: white;
-	text-shadow: 3px 3px 5px black;
-	margin-bottom: 10px;
-	white-space: nowrap;
-	text-align: center;
+    background-image: url('images/budapest.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 45px;
+    color: white;
+    text-shadow: 3px 3px 5px black;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .subhead h1 {
-	font-size: 60px;
+    font-size: 60px;
 }
 
 .subhead .lead {
@@ -39,8 +39,8 @@
 
 .subhead p {
     margin-top: 20px;
-	font-size: 24px;
-	font-weight: 300;
+    font-size: 24px;
+    font-weight: 300;
 }
 
 #logodiv {
@@ -52,55 +52,55 @@
 }
 
 .nav li a {
-	color: #003399;
+    color: #003399;
 }
 
 .affix {
-	top: 10px;
+    top: 10px;
 }
 
 #emptyness {
-	height: 200px;
+    height: 200px;
 
 }
 
 #regscreenshot{
-	margin-top: 10px;
-	margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 section {
-	padding-top: 10px;
+    padding-top: 10px;
 }
 
 @media all and (max-width:779px){
-	.affix {
-		position: static;
-	}
-	.subhead h1 {
-		font-size: 32px;
-	}
-	
-	.subhead p {
-		font-size: 24px;
-		font-weight: 300;
-	}
+    .affix {
+	position: static;
+    }
+    .subhead h1 {
+	font-size: 32px;
+    }
+    
+    .subhead p {
+	font-size: 24px;
+	font-weight: 300;
+    }
 
-	#sponsors li{
-		width: 200px;
-		margin: auto;
-	}
+    #sponsors li{
+	width: 200px;
+	margin: auto;
+    }
 }
 
 @media all and (max-width:479px){
-	.subhead, .media-object {
-		display: none;
-	}
+    .subhead, .media-object {
+	display: none;
+    }
 
 }
 
 .media-object{
-	width: 64px;
-	margin-right: 25px;
-	margin-top: 15px;
+    width: 64px;
+    margin-right: 25px;
+    margin-top: 15px;
 }
