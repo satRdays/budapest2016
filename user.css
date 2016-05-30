@@ -105,12 +105,10 @@ section {
 }
 
 
-div.speaker {
-    width: 49%;
+section.speaker div.row {
     text-align: center;
-    display: inline-block;
 }
-div.speaker .speaker-photo {
+section.speaker .speaker-photo {
     width: 40%;
     height: auto;
     position: relative;
@@ -118,7 +116,7 @@ div.speaker .speaker-photo {
     margin-left: auto;
     margin-right: auto;
 }
-div.speaker .speaker-photo img {
+section.speaker .speaker-photo img {
     display: block;
     margin: 0 auto;
     height: auto;
@@ -129,11 +127,11 @@ div.speaker .speaker-photo img {
     -o-border-radius: 50%;
     border-radius: 50%;
 }
-div.speaker .speaker-name {
+section.speaker .speaker-name {
     padding-top: 10px;
     font-size: 2em;
 }
-div.speaker .speaker-affiliation {
+section.speaker .speaker-affiliation {
     padding-top: 10px;
     font-size: 1.5em;
 }
