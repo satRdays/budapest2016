@@ -135,3 +135,15 @@ section.speaker .speaker-affiliation {
     padding-top: 10px;
     font-size: 1.5em;
 }
+
+/* Mailchimp form */
+#mc_embed_signup {
+    margin-top: 20px;
+    margin-bottom: -25px;
+}
+#mc_embed_signup .button {
+    background-color: #0088CC !important;
+}
+#mc_embed_signup .button:hover {
+    background-color: #2165B6 !important;
+}
