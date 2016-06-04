@@ -143,6 +143,7 @@ section.speaker .speaker-affiliation {
 }
 #mc_embed_signup .button {
     background-color: #0088CC !important;
+    margin-top: -8px;
 }
 #mc_embed_signup .button:hover {
     background-color: #2165B6 !important;
