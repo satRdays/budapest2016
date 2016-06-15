@@ -105,10 +105,11 @@ section {
 }
 
 
-section.speaker div.row {
+.speaker {
     text-align: center;
+    margin-top: 15px;
 }
-section.speaker .speaker-photo {
+.speaker .speaker-photo {
     width: 40%;
     height: auto;
     position: relative;
@@ -116,7 +117,7 @@ section.speaker .speaker-photo {
     margin-left: auto;
     margin-right: auto;
 }
-section.speaker .speaker-photo img {
+.speaker .speaker-photo img {
     display: block;
     margin: 0 auto;
     height: auto;
@@ -127,13 +128,16 @@ section.speaker .speaker-photo img {
     -o-border-radius: 50%;
     border-radius: 50%;
 }
-section.speaker .speaker-name {
+.speaker .speaker-name {
     padding-top: 10px;
     font-size: 2em;
 }
-section.speaker .speaker-affiliation {
+.speaker .speaker-affiliation {
     padding-top: 10px;
     font-size: 1.5em;
+}
+.speaker .speaker-bio {
+    display: none;
 }
 
 /* Mailchimp form */

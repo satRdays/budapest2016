@@ -1,4 +1,14 @@
 $(document).ready(function() {
+
+    $('.speaker').hover(
+	// mouse over
+	function() {
+	    $(this).find(".speaker-bio").toggle();
+	},
+	// mouse out
+	function() {
+	    $(this).find(".speaker-bio").toggle();
+	});
     
     $(".sidebar").on("activate", function(){
 	$(".usermenu li a i").removeClass("icon-white");
