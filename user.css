@@ -139,6 +139,9 @@ section {
 .speaker .speaker-bio {
     display: none;
 }
+.speaker .speaker-social {
+    padding: 5px;
+}
 
 /* Mailchimp form */
 #mc_embed_signup {
