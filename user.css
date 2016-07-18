@@ -143,6 +143,17 @@ section {
     padding: 5px;
 }
 
+#speakers .speaker .speaker-photo {
+    width: 50%;
+}
+#speakers .speaker .speaker-name {
+    font-size: 1.75em;
+}
+#speakers .speaker .speaker-affiliation {
+    font-size: 1.3em;
+}
+
+
 /* Mailchimp form */
 #mc_embed_signup {
     margin-top: 20px;
