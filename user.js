@@ -1,14 +1,15 @@
 $(document).ready(function() {
 
-    $('.speaker').hover(
-	// mouse over
-	function() {
-	    $(this).find(".speaker-bio").toggle();
-	},
-	// mouse out
-	function() {
-	    $(this).find(".speaker-bio").toggle();
+    $('.speaker').each(function() {
+	var $this = $(this);
+	$this.popover({
+	    trigger: 'hover',
+	    placement: 'top',
+	    html: true,
+	    content: $this.find('.speaker-bio').html(),
+	    title: $this.find('.speaker-name').html()
 	});
+    });
     
     $(".sidebar").on("activate", function(){
 	$(".usermenu li a i").removeClass("icon-white");
