@@ -153,6 +153,32 @@ section {
     font-size: 1.3em;
 }
 
+#sponsors {
+    text-align: center;
+}
+#sponsors h1,h3,p {
+    text-align: left;
+}
+#sponsors img {
+    padding: 5px;
+}
+#sponsors img.platinum {
+    width: 500px;
+}
+#sponsors img.gold {
+    width: 400px;
+}
+#sponsors img.silver {
+    width: 300px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+#sponsors img.bronze {
+    width: 200px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
 
 /* Mailchimp form */
 #mc_embed_signup {
