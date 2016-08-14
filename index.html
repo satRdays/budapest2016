@@ -740,9 +740,28 @@
 		  <tr><th>Title</th><th>Presenter</th></tr>
 		</thead>
 		<tbody>
-		  <tr> <td>A systematic approach to data cleaning with R</td><td>Mark van der Loo
-</td> </tr>
-		  <tr> <td>Scalable Machine Learning with H2O</td><td>Jo-fai (Joe) Chow</td> </tr>
+		  <tr class="talk">
+		    <td>A systematic approach to data cleaning with R</td>
+		    <td>Mark van der Loo</td>
+		  </tr>
+		  <tr class="abstract"><td colspan="2">
+		      <p>There are two data-cleaning related factoids that are quoted often on the web: 80% of the data is unstructured, and about the same fraction of time is spent on data cleaning. Although there is little systematic research to substantiate these claims, most data analysts will agree that getting data 'clean' for analyses is both essential and time-consuming.</p>
+
+		      <p>In this 90 minute tutorial we develop a systematic view on data cleaning. Using the concept of a 'statistical value chain' as starting point, we will see that data cleaning has a natural place in a statistical analyses and that data cleaning can be thought of as a two-step process. In the first step one ensures the correct technical representation of a data set (variable type, text encoding, identifiability of a value, etc.). The second step is about ensuring that data meets expectations from domain knowledge (e.g. ages must be positive, an under-aged person cannot have an income from work, etc.).</p>
+
+		      <p>In this tutorial we will demonstrate, using practical examples, several tools and R packages that can be used to solve both technical and content-related issues. Topics include but are not limited to string processing and approximate text matching, date/time conversion and knowledge-based data validation and correction. We also touch upon how to measure and visualize data quality and the effects of data cleaning on statistics.</p>
+		  </td></tr>
+		  <tr class="talk">
+		    <td>Scalable Machine Learning with H2O</td>
+		    <td>Jo-fai (Joe) Chow</td>
+		  </tr>
+		  <tr class="abstract"><td colspan="2">
+		      <p>The focus of this tutorial is scalable machine learning using the H2O R package. H2O is an open source, distributed machine learning platform designed for big data, with the added benefit that it's easy to use on a laptop (in addition to a multi-node Hadoop or Spark cluster). The core machine learning algorithms of H2O are implemented in high-performance Java, however, fully-featured APIs are available in R, Python, Scala, REST/JSON, and also through a web interface.</p>
+
+			<p>Since H2O's algorithm implementations are distributed, this allows the software to scale to very large datasets that may not fit into RAM on a single machine. H2O currently features distributed implementations of Generalized Linear Models, Gradient Boosting Machines, Random Forest, Deep Neural Nets, dimensionality reduction methods (PCA, GLRM), clustering algorithms (K-means), anomaly detection methods, among others. The ability to create stacked ensembles, or ""Super Learners"", from a collection of supervised base learners is provided via the h2oEnsemble R package.</p>
+
+			<p>R scripts/notebook with H2O machine learning code examples will be demoed live and made available on GitHub for attendees to follow along on their laptops.</p>
+		  </td></tr>
 		  <tr class="talk">
 		      <td>Data manipulation the #rdatatable way</td>
 		      <td>Arun Srinivasan</td>
@@ -779,13 +798,35 @@
 															  </ul>
 
 	  </td></tr>
-          <tr> <td>Intro to Shiny</td><td>Kate Ross-Smith</td> </tr>
-		  <tr> <td>Advanced Shiny dashboard topics</td><td>Herman Sontrop</td> </tr>
-		  <tr> <td>Joy of ggplot2</td><td>Vincent Warmerdam</td> </tr>
-		</tbody>
-	      </table>
+          <tr class="talk">
+	    <td>Intro to Shiny</td>
+	    <td>Kate Ross-Smith</td>
+	  </tr>
+          <tr class="abstract"><td colspan="2">
+	      <p>An introductory workshop that takes delegates from little or no knowledge of shiny to being able to create your own app and RStudio add-in.</p>
 
-              <p>Please note that no computers will be provided at the workshops, so we recommend bringing your own computer.</p>
+	      <p>We will focus on what you need to get started, and how keep to good coding practice.</p>
+
+	      <p>You do not need to have any previous knowledge or experience of shiny.</p>
+	  </td></tr>
+          <tr class="talk">
+	    <td>Advanced Shiny dashboard topics</td>
+	    <td>Herman Sontrop</td>
+	  </tr>
+          <tr class="abstract"><td colspan="2">
+	      <p>Shiny is a web application framework that makes it easy to build interactive web applications straight from R. A key feature of shiny is that users can create powerful apps driven by R without having to know HTML, CSS or JavaScript. However, incorporating these technologies into your apps can greatly enhance the power of shiny. In this workshop we’ll teach you how to create your own custom JavaScript bindings based on the htmlwidget package. The htmlwidgets package provides a framework for creating such bindings and allows you to bring the best of JavaScript into R. Even though using an htmlwidget is easy, constructing one may be challenging at first as you have to know a number of concepts in order to create a widget. These include things such as how to build an R package and how to use some basic JavaScript, CSS and HTML. This workshop is intended for the intermediate shiny enthusiast with limited experience in HTML, CSS and/or JavaScript, who wants to learn how to extend shiny. We’ll be creating a number of htmlwidgets based on C3.js, a popular JavaScript chart library, based on d3.js. In addition, we show various ways to extend Shiny by using JavaScript outside of the htmlwidgets framework.</>
+	  </td></tr>
+          <tr class="talk">
+	    <td>Joy of ggplot2</td>
+	    <td>Vincent Warmerdam</td>
+	  </tr>
+          <tr class="abstract"><td colspan="2">
+	      <p>GGplot2 is such a great plotting tool that people consider using R just for the library. In this session we will demonstrate why by emphasising the joy of working with it. We will use a minimal amount of dplyr and use ggplot to quickly analyse a few example datasets.</p>
+	  </td></tr>
+          </tbody>
+        </table>
+
+               <p>Please note that no computers will be provided at the workshops, so we recommend bringing your own computer.</p>
 
 	    </section>
 

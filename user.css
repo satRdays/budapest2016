@@ -186,7 +186,7 @@ section {
 
 .abstract {
     display: none;
-    background-color: lightgray;
+    background-color: #ddd;
     margin-top: 15px;
     border: 2px solid;
     padding: 5px;
