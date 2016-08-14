@@ -10,6 +10,10 @@ $(document).ready(function() {
 	    title: $this.find('.speaker-name').html()
 	});
     });
+
+    $('.talk').click(function() {
+	$(this).next().toggle();
+    });
     
     $(".sidebar").on("activate", function(){
 	$(".usermenu li a i").removeClass("icon-white");

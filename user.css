@@ -179,6 +179,18 @@ section {
     margin-right: 50px;
 }
 
+.talk {
+    color: #08c;
+    text-decoration: underline;
+}
+
+.abstract {
+    display: none;
+    background-color: lightgray;
+    margin-top: 15px;
+    border: 2px solid;
+    padding: 5px;
+}
 
 /* Mailchimp form */
 #mc_embed_signup {
