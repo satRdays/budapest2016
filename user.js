@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+    // popup bio for speakers
     $('.speaker').each(function() {
 	var $this = $(this);
 	$this.popover({
@@ -11,10 +12,14 @@ $(document).ready(function() {
 	});
     });
 
+    // toggle show/hide abstrac for a talk
     $('.talk').click(function() {
 	$(this).next().toggle();
     });
-    
+    $('.abstract').click(function() {
+	$(this).toggle();
+    });
+
     $(".sidebar").on("activate", function(){
 	$(".usermenu li a i").removeClass("icon-white");
 	$(".usermenu li.active a i").addClass("icon-white")
