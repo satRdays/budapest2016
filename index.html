@@ -964,22 +964,27 @@
 		</thead>
 		<tbody>
 		  <tr>
+		    <td>7:45</td>
+		    <td>8:00</td>
+		    <td><div class="session-title">Early registration for the workshop attendees</div></td>
+		  </tr>
+		  <tr>
 		    <td>8:00</td>
 		    <td>9:30</td>
 		    <td><div class="session-title"><a href="#workshops">Workshops</a></div></td>
 		  </tr>
 		  <tr>
-		    <td>9:00</td>
+		    <td>9:30</td>
 		    <td>10:00</td>
-		    <td><div class="session-title">Registration</div></td>
+		    <td><div class="session-title">Registration and coffee break</div></td>
 		  </tr>
 		  <tr>
 		    <td>10:00</td>
-		    <td>10:15</td>
+		    <td>10:10</td>
 		    <td><div class="session-title">Conference opening</div></td>
 		  </tr>
 		  <tr>
-		    <td>10:15</td>
+		    <td>10:10</td>
 		    <td>11:00</td>
 		    <td>
 		      <div class="session-title">Keynote #1</div>
@@ -1036,6 +1041,7 @@
 		    <td>13:40</td>
 		    <td>15:00</td>
 		    <td>
+
 		      <div class="session-title">R packages session</div>
 
 		      <div class="session-talk talk">Arun Srinivasan: New developments in the #rdatatable package</div>
@@ -1048,6 +1054,13 @@
 			<p>The 'validate' package makes it easy to formulate such assumptions, confront your data with these assumptions and subsequently to summarize or visualize the results in a transparent and reproducible way. In particular, 'validate' treats knowledge rules as first class citizens which means that they can be manipulated, documented, and stored and retrieved from file.</p>
 			<p>In this talk I will give an overview of the data validation infrastructure that the package offers, how it might be used, and I will highlight some upcoming developments.</p>
 		      </div>
+
+		      <div class="session-talk talk">Romain François: A dplyr use case</div>
+		      <div class="session-abstract abstract">
+			<p>A data manipulation case study using the dplyr syntax, probably using data from the Bechtel Test website about representation of women in the movies industry.</p>
+		      </div>
+
+		      <div class="session-title">Lightning talks</div>
 		      
 		      <div class="session-talk talk">Bo Werth: nsoAPI - retrieving data from National Statistical Offices with R</div>
 		      <div class="session-abstract abstract">
@@ -1057,10 +1070,29 @@
 			<p>With the exception of France, large countries tend to set their own standards. The BEA (USA) and ONS (UK) require the user to create an ID that needs to be submitted with each request. GENESIS (Germany) require the user to pay 500 Euros per year (250 Euros for academic users) to access the API.</p>
 		      </div>
 
-		      <div class="session-talk talk">Romain François: A dplyr use case</div>
+		      <div class="session-talk talk">Viktor Tachev: The effect of High-Frequency Trading activity on volatility in systemically important ETFs</div>
 		      <div class="session-abstract abstract">
-			<p>A data manipulation case study using the dplyr syntax, probably using data from the Bechtel Test website about representation of women in the movies industry.</p>
+			<p>The aim of the research paper is to track the relationship between the rapidly-growing High-Frequency Trading activity and the dynamics in volatility levels for the most actively traded and systemically important ETFs. The source for the intraday data that I work with is Bloomberg®. The time period is 2006 - 2016. The summarized research methodology is as follows:</p>
+			  <ul>
+			    <li>Measuring Volatility with the Yang-Zhang Volatility Estimator;</li>
+			    <li>Engle-Granger Cointegration Tracking via different tests - ADF, Phillips-Perron, PGFF, ERSD, JOT, SPR; </li>
+			  <li>Testing for Granger Causality</li>
+			  <li>GARCH Modeling;</li>
+			  </ul>
+			<p>The generated results indicate that HFT activity results in increased volatility in more than 70% of the analyzed ETFs, directly affecting other investors, including pension funds and insurance companies.</p>
+			<p>R Packages used: tseries; zoo; xts; quantmod; timeSeries; TTR; PerformanceAnalytics; lmtest; vars; egcm; rugarch</p>
 		      </div>
+
+		      <div class="session-talk talk">Iegor Rudnytskyi: estudy2: an R package for the event study</div>
+		      <div class="session-abstract abstract">
+			<p>The impact of relevant events on the stock market valuation of companies has been the subject of many studies. An event study is a statistical toolbox that allows to examine the impact of certain events on the firms' stock valuation. Given the rationality of market participants, the prices of securities immediately incorporate any relevant announcements, information, and updates.</p>
+			<p>The idea of the event study is to compare the market valuation of the companies during periods related to an event and other (non-event linked) periods. If the behavior of stocks is significantly different in the event-period, then we conclude that an event produces an impact on the market valuation, otherwise we conclude that there is no effect.</p>
+			<p>The major stream of research is focused on the insurance industry and catastrophe events, therefore, the cross-sectional dependence cannot be neglected. Furthermore, the returns typically are not normally distributed. These points lead to misspecification of the classical parametric tests, and require to validate the results by more tailored and accurate tests (both parametric and nonparametric).</p>
+			<p>In order to incorporate all these issues we developed the package estudy2 (planned to be submitted to CRAN by August 2016). First, estudy2 incorporates all technical aspects of the rate of return calculation (the core computation is done in C++ by using Rcpp). Also the package incorporates 3 traditional market models: mean-adjusted returns, market-adjusted returns, single-index market model.</p>
+			<p>Finally, 6 parametric and 6 nonparametric tests of daily cross-sectional abnormal return have been implemented. In addition, the package contains the tests for cumulative abnormal returns (CAR).</p>
+			<p>In the proposed talk we demonstrate an example from current research, namely, the impact of major catastrophes on insurance firms' market valuation in order to validate the specification of the tests.</p>
+		      </div>
+		      
 		    </td>
 		    
 		  </tr>
@@ -1074,12 +1106,12 @@
 		  </tr>
 		  <tr>
 		    <td>15:50</td>
-		    <td>16:15</td>
+		    <td>16:20</td>
 		    <td><div class="session-title">Coffee break</div></td>
 		  </tr>
 		  <tr>
-		    <td>16:15</td>
-		    <td>17:35</td>
+		    <td>16:20</td>
+		    <td>17:45</td>
 		    <td>
 		      <div class="session-title">Machine Learning session</div>
 
@@ -1100,70 +1132,25 @@
 		      <div class="session-abstract abstract">
 			<p>With modern advances in computing and the increasing abundance of digital data, it is becoming both feasible and necessary to expand our data analysis methods beyond conventional mathematical modeling and data visualization. Music and other emerging data analysis paradigms present the opportunity to represent high-dimensional data in intuitive and accessible forms. In this talk I will introduce the concept of plotting data as music and demonstrate some end-user music synthesis tools that are available within the R ecosystem.</p>
 		      </div>
-		      
-		    </td>
-		  </tr>
-		  <tr>
-		    <td>17:35</td>
-		    <td>18:05</td>
-		    <td><div class="session-title">Coffee break</div></td>
-		  </tr>
-		  <tr>
-		    <td>18:05</td>
-		    <td>18:40</td>
-		    <td>
 
 		      <div class="session-title">Lightning talks</div>
-
-		      <div class="session-talk talk">Áine Uí Ghiollagáin: RUG Toolbox</div>
-		      <div class="session-abstract abstract">
-			<p>R is (for some of us at least) easier to use than to learn. It can also be difficult to keep up with new packages and other developments. R User Groups can help with both these challenges, as well as help members develop other skills (presentation, organisation, and networking), yet there is little enough helpful administrative or other support (templates, suggestions, or policies) for new and established groups. This lightning talk proposes to introduce the framing of a RUG Toolbox, a collection of templates and case studies, contributed by R users and R user groups, collated and made available on GitHub, which can help groups start, plan, develop and join R networks locally and further afield.</p>
-		      </div>
 		      
-		      <div class="session-talk talk">Viktor Tachev: The effect of High-Frequency Trading activity on volatility in systemically important ETFs</div>
-		      <div class="session-abstract abstract">
-			<p>The aim of the research paper is to track the relationship between the rapidly-growing High-Frequency Trading activity and the dynamics in volatility levels for the most actively traded and systemically important ETFs. The source for the intraday data that I work with is Bloomberg®. The time period is 2006 - 2016. The summarized research methodology is as follows:</p>
-			  <ul>
-			    <li>Measuring Volatility with the Yang-Zhang Volatility Estimator;</li>
-			    <li>Engle-Granger Cointegration Tracking via different tests - ADF, Phillips-Perron, PGFF, ERSD, JOT, SPR; </li>
-			  <li>Testing for Granger Causality</li>
-			  <li>GARCH Modeling;</li>
-			  </ul>
-			<p>The generated results indicate that HFT activity results in increased volatility in more than 70% of the analyzed ETFs, directly affecting other investors, including pension funds and insurance companies.</p>
-			<p>R Packages used: tseries; zoo; xts; quantmod; timeSeries; TTR; PerformanceAnalytics; lmtest; vars; egcm; rugarch</p>
-		      </div>
-
-		      <div class="session-talk talk">Zsuzsanna Szabó: Visualization of geochemical modeling results by R</div>
-		      <div class="session-abstract abstract">
-			<p>I use the software PHREEQC for modeling rock-water interactions. The output of these geochemical models are several types of complex data tables depending on weather I run thermodynamic mixing, kinetic and reactive transport models. By the increasing number of model runs, automatization of the figure production, easy visualization of output sensitivity on model parameters became necessary, as well as presentation of reactive transport of water in rock by not only figures, but also GIF animations. For these, I use R packages dplyr, reshape2, ggplot2, animation and graphics. I present code, the resulting figures and GIF animations of chemical changes in water while it flows through cells of defined rock, as well as indicated mineral dissolution and precipitation processes in space and time. I also mention R packages PHREEQC and ReacTran to better present the capability of R in the field of geochemistry.</p>
-		      </div>
-
-		      <div class="session-talk talk">Iegor Rudnytskyi: estudy2: an R package for the event study</div>
-		      <div class="session-abstract abstract">
-			<p>The impact of relevant events on the stock market valuation of companies has been the subject of many studies. An event study is a statistical toolbox that allows to examine the impact of certain events on the firms' stock valuation. Given the rationality of market participants, the prices of securities immediately incorporate any relevant announcements, information, and updates.</p>
-			<p>The idea of the event study is to compare the market valuation of the companies during periods related to an event and other (non-event linked) periods. If the behavior of stocks is significantly different in the event-period, then we conclude that an event produces an impact on the market valuation, otherwise we conclude that there is no effect.</p>
-			<p>The major stream of research is focused on the insurance industry and catastrophe events, therefore, the cross-sectional dependence cannot be neglected. Furthermore, the returns typically are not normally distributed. These points lead to misspecification of the classical parametric tests, and require to validate the results by more tailored and accurate tests (both parametric and nonparametric).</p>
-			<p>In order to incorporate all these issues we developed the package estudy2 (planned to be submitted to CRAN by August 2016). First, estudy2 incorporates all technical aspects of the rate of return calculation (the core computation is done in C++ by using Rcpp). Also the package incorporates 3 traditional market models: mean-adjusted returns, market-adjusted returns, single-index market model.</p>
-			<p>Finally, 6 parametric and 6 nonparametric tests of daily cross-sectional abnormal return have been implemented. In addition, the package contains the tests for cumulative abnormal returns (CAR).</p>
-			<p>In the proposed talk we demonstrate an example from current research, namely, the impact of major catastrophes on insurance firms' market valuation in order to validate the specification of the tests.</p>
-		      </div>
-
 		      <div class="session-talk talk">Jenő Pál: Uncovering political connections of firms using machine learning methods</div>
 		      <div class="session-abstract abstract">
 			<p>Political connections can have a profound influence on the success and profitability of firms. However, discovering these connections are difficult since firms typically try to hide their political ties from the public. We link data on local and parliamentary elections to administrative data about firms to create features that can be indicative of political connections. Applying machine learning algorithms we build classification models with the goal of identifying political leaning of Hungarian firms at a large scale.</p>
 			<p>We use R for all parts of the project, starting from data wranging through visualization to building and evaluating machine learning models. Packages used include data.table, dplyr, ggplot2 and caret.</p>
 		      </div>
-
-		      <div class="session-talk talk">David Parr: Got r? Catch 'em all!</div>
-		      <div class="session-abstract abstract">
-			<p>Collecting Pokémon data from websites using rvest</p>
-		      </div>
 		      
 		    </td>
 		  </tr>
 		  <tr>
-		    <td>18:40</td>
-		    <td>19:40</td>
+		    <td>17:45</td>
+		    <td>18:15</td>
+		    <td><div class="session-title">Coffee break</div></td>
+		  </tr>
+		  <tr>
+		    <td>18:15</td>
+		    <td>19:30</td>
 		    <td>
 
 		      <div class="session-title">R use-cases session</div>
@@ -1182,11 +1169,28 @@
 		      <div class="session-talk talk">Herman Sontrop: Using R and Shiny at FRISS</div>
 		      <div class="session-abstract abstract">
 		      </div>
+
+	      	      <div class="session-title">Lightning talks</div>
+
+		      <div class="session-talk talk">Áine Uí Ghiollagáin: RUG Toolbox</div>
+		      <div class="session-abstract abstract">
+			<p>R is (for some of us at least) easier to use than to learn. It can also be difficult to keep up with new packages and other developments. R User Groups can help with both these challenges, as well as help members develop other skills (presentation, organisation, and networking), yet there is little enough helpful administrative or other support (templates, suggestions, or policies) for new and established groups. This lightning talk proposes to introduce the framing of a RUG Toolbox, a collection of templates and case studies, contributed by R users and R user groups, collated and made available on GitHub, which can help groups start, plan, develop and join R networks locally and further afield.</p>
+		      </div>
+		      
+		      <div class="session-talk talk">David Parr: Got r? Catch 'em all!</div>
+		      <div class="session-abstract abstract">
+			<p>Collecting Pokémon data from websites using rvest</p>
+		      </div>
+
+		      <div class="session-talk talk">Zsuzsanna Szabó: Visualization of geochemical modeling results by R</div>
+		      <div class="session-abstract abstract">
+			<p>I use the software PHREEQC for modeling rock-water interactions. The output of these geochemical models are several types of complex data tables depending on weather I run thermodynamic mixing, kinetic and reactive transport models. By the increasing number of model runs, automatization of the figure production, easy visualization of output sensitivity on model parameters became necessary, as well as presentation of reactive transport of water in rock by not only figures, but also GIF animations. For these, I use R packages dplyr, reshape2, ggplot2, animation and graphics. I present code, the resulting figures and GIF animations of chemical changes in water while it flows through cells of defined rock, as well as indicated mineral dissolution and precipitation processes in space and time. I also mention R packages PHREEQC and ReacTran to better present the capability of R in the field of geochemistry.</p>
+		      </div>
 		      
 		    </td>
 		  </tr>
 		  <tr>
-		    <td>19:40</td>
+		    <td>19:30</td>
 		    <td>20:00</td>
 		    <td>
 		      <div class="session-title"><a href="#datavizcompo">Data Visualization Challenge</a> with pizza on the side</div>
