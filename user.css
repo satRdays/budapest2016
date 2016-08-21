@@ -194,6 +194,24 @@ section {
     cursor: pointer;
 }
 
+.session-title {
+    font-weight: bolder;
+}
+.session-talk {
+    margin-left: 15px;
+}
+.session-talk:before {
+    color: black;
+    float: left;
+    margin: 0 0 0 -1em;
+    width: 1em;
+    content: '\2022';
+}
+.session-abstract {
+    display: none;
+    margin-bottom: 10px;
+}
+
 /* Mailchimp form */
 #mc_embed_signup {
     margin-top: 20px;

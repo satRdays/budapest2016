@@ -939,20 +939,229 @@
 
 	      <table class="table table-hover">
 		<thead>
-		  <tr><th>From</th><th>To</th><th>Session</th></tr>
+		  <tr><th>Start</th><th>End</th><th width="99%">Session</th></tr>
 		</thead>
 		<tbody>
-		  <tr> <td>8:00</td><td>9:30</td><td>Workshops</td> </tr>
-		  <tr> <td>9:00</td><td>10:00</td><td>Registration</td> </tr>
-		  <tr> <td>10:00</td><td>10:15</td><td>Conference opening</td> </tr>
-		  <tr> <td>10:15</td><td>11:00</td><td>Keynote #1</td> </tr>
-		  <tr> <td>11:00</td><td>12:30</td><td>Parallel session #1</td> </tr>
-		  <tr> <td>12:30</td><td>13:30</td><td>Lunch</td> </tr>
-		  <tr> <td>13:30</td><td>14:15</td><td>Keynote #2</td> </tr>
-		  <tr> <td>14:15</td><td>15:45</td><td>Parallel session #2</td> </tr>
-		  <tr> <td>15:45</td><td>16:15</td><td>Coffee break</td> </tr>
-		  <tr> <td>16:15</td><td>18:00</td><td>Session #3 and #4</td> </tr>
-		  <tr> <td>18:00</td><td>19:00</td><td>Dashboard compo</td> </tr>
+		  <tr>
+		    <td>8:00</td>
+		    <td>9:30</td>
+		    <td><div class="session-title"><a href="#workshops">Workshops</a></div></td>
+		  </tr>
+		  <tr>
+		    <td>9:00</td>
+		    <td>10:00</td>
+		    <td><div class="session-title">Registration</div></td>
+		  </tr>
+		  <tr>
+		    <td>10:00</td>
+		    <td>10:15</td>
+		    <td><div class="session-title">Conference opening</div></td>
+		  </tr>
+		  <tr>
+		    <td>10:15</td>
+		    <td>11:00</td>
+		    <td>
+		      <div class="session-title">Keynote #1</div>
+		      <div class="session-talk talk">Gábor Csárdi</div>
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>11:00</td>
+		    <td>12:40</td>
+		    <td>
+		      <div class="session-title">R infrastructure session</div>
+
+		      <div class="session-talk talk">Steph Locke: Infrastructure for R peeps</div>
+		      <div class="session-abstract abstract"><p>Continuous integration, Docker, openCPU, shiny server, RStudio server, Microsoft R Server, R in Hadoop, your laptop, your grid computer ... There's a lot of infrastructure out there and someone has to configure it. This session whistle-stops through networking, Linux basics, and other key concepts to help get you up to speed because one day, the person configuring the server could be you.</p></div>
+
+		      <div class="session-talk talk">Ágnes Salánki: Use The Right Tool — R in Infrastructure and Business Analytics</div>
+		      <div class="session-abstract abstract">
+			<p>R provides an immense amount of packages (which is not surprising, considering how awesome community it has), it supports nearly everything from effective data visualization through web scraping to the weirdest applications, like getting your favourite XKCD comics. No wonder that the really dedicated users -- independently from the exact domain they work in -- hardly ever need to switch to other environments while doing analytics-related tasks. The talk will cover my personal swiss army knife toolsets I use for infrastructure and business analytics. It will show:</p>
+			<ul>
+			  <li>how similar infrastructure logs and customer mouse click streams are as data sources;</li>
+			  <li>how the toolset is influenced by the target audience: whether they are researchers in academia or product managers of a start-up; and</li>
+			  <li>what most painful obstacles one could face while using R in these domains. The conclusions about different analytics workflows intend to present a good starter kit for R beginners with varying professional background.</li>
+			</ul>
+		      </div>
+	      
+		      <div class="session-talk talk">Filip Stachura: Workflow around modelling in Data Science / R</div>
+		      <div class="session-abstract abstract">
+			<p>Working as a data scientist usually means working with data, building models, evaluating the results, translating them into actionable insights, getting feedback from experts and repeating the process.</p>
+			<p>Hardly ever one starts with the model that finally will be used in production. It is usually trial and error process of trying new things and experimenting. That’s why data science project could get disorganized rapidly. Every test involves a new script, each script requires a multiple arguments and produces one or more data files. Keeping track of all this implied structure is a pain.</p>
+			<p>The talk stresses the importance of having a process around data science related tasks, while keeping the main focus on creating a data product. We demonstrate the implementation of the light data science workflow - Dataflows.  Dataflows allows R users to create pipelines, without writing extra code, is self documenting and easy to start working with.</p>
+			<p>During the talk we show the benefits of formalizing and structuring the process of model building in R. We mention the bottlenecks, propose solutions and biggest wins accomplished by introducing Dataflows. We strive to share our hands-on experience from various data science projects using R.</p>
+		      </div>
+
+		      <div class="session-talk talk">András Tajti: Door to door fraud detection</div>
+		      <div class="session-abstract abstract">
+			<p>R is the most popular statistical programming language, partly because its capability of a lot - and still increasing number - of other tasks. The talk will not care about statistical analysis, but will care about automatization, reading and uploading  from and to FTP and SFTP server, reading and editing MySQL locally or through SSH, platform-independent development. Tries, cathes, roads to (sub)optimal solutions.</p>
+			<p>I will present my experience in developing an automated fraud detection system, which shares data with the insurance company through an FTP server. After downloading, it identifies customers using basic personal information and company informations. The next (relatively easy) step is computing different features used for scoring claims, then create a conditionally formatted, multiple-sheet excel file with data about the freshest claims, which will be sent as e-mail attachment to the insurance company. All results will be uploaded to an FTP server for further processing by an interactive reporting system.</p>
+			<p>Be prepared for system calls, MySQL query asssembling, graph creating, memory management and some data.table magic.</p>
+		      </div>
+		      
+		      <div class="session-talk talk">Tomaž Kaštrun: R Integration into SQL Server 2016</div>
+		      <div class="session-abstract abstract">
+			<p>Session will show the Usage of R Language in SQL Server 2016 database system with it's T-SQL language support. We will cover using simple to multivariate statistics against typical transactional database data, log data and monitoring data. Are you data analyst or DBA or developer? Join and learn how to combine both worlds.</p>
+		      </div>
+		      
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>12:40</td>
+		    <td>13:40</td>
+		    <td><div class="session-title">Lunch</div></td>
+		  </tr>
+		  <tr>
+		    <td>13:40</td>
+		    <td>15:00</td>
+		    <td>
+		      <div class="session-title">R packages session</div>
+
+		      <div class="session-talk talk">Arun Srinivasan: New developments in the #rdatatable package</div>
+		      <div class="session-abstract abstract">
+			<p>The data.table R package provides fast and memory efficient ways for data manipulation together with a flexible and consistent syntax. It was first released to CRAN in 2006. It has had over 30 releases since then with the current latest stable release being v1.9.6. Over 240 CRAN and Bioconductor packages now import/depend on data.table. Its StackOverflow tag has attracted 4000 questions from users in many fields making it a top 3 asked about R package. It is the 8th most starred R package on Github.</p>
+		      </div>
+		      
+		      <div class="session-talk talk">Mark van der Loo: Data validation with the "validate" package</div>
+		      <div class="session-abstract abstract"><p>In most situations a statistical analyst has no or only limited control over the process that generates the raw data to be analyzed. Testing assumptions about raw data, intermediate and final results is therefore an essential part of any statistical analyses. Often, such domain knowledge can be expressed in short statements such as 'age must be non-negative' or 'if two persons live at the same postal code, they live in the same city'.</p>
+			<p>The 'validate' package makes it easy to formulate such assumptions, confront your data with these assumptions and subsequently to summarize or visualize the results in a transparent and reproducible way. In particular, 'validate' treats knowledge rules as first class citizens which means that they can be manipulated, documented, and stored and retrieved from file.</p>
+			<p>In this talk I will give an overview of the data validation infrastructure that the package offers, how it might be used, and I will highlight some upcoming developments.</p>
+		      </div>
+		      
+		      <div class="session-talk talk">Bo Werth: nsoAPI - retrieving data from National Statistical Offices with R</div>
+		      <div class="session-abstract abstract">
+			<p>National Statistical Offices have started setting up web services to provide published information through data APIs. Even though international standards exist, e.g. SDMX, the majority of NSOs create their individual API and few use existing community standards.</p>
+			<p>nsoAPI is an attempt to create a single package with functions for each provider that convert a custom data format into an R standard time series format ready for analysis or further transformation.</p>
+			<p><a href="https://www.gitbook.com/read/book/bowerth/opendata-tables">https://www.gitbook.com/read/book/bowerth/opendata-tables</a> lists tables that can be retrieved from SDMX (International Organizations, ABS: Australia, INEGI: Mexico, INSEE: France and ISTAT: Italy, NBB: Belgium), the pxweb package (PXNET2: Finland, SCB: Sweden) and the nsoAPI package (BEA: USA, CBS: the Netherlands, GENESIS: Germany, ONS: UK, SSB: Norway, STATAT: Austria, STATBANK: Denmark).</p>
+			<p>With the exception of France, large countries tend to set their own standards. The BEA (USA) and ONS (UK) require the user to create an ID that needs to be submitted with each request. GENESIS (Germany) require the user to pay 500 Euros per year (250 Euros for academic users) to access the API.</p>
+		      </div>
+
+		      <div class="session-talk talk">Romain François: A dplyr use case</div>
+		      <div class="session-abstract abstract">
+			<p>A data manipulation case study using the dplyr syntax, probably using data from the Bechtel Test website about representation of women in the movies industry.</p>
+		      </div>
+		    </td>
+		    
+		  </tr>
+		  <tr>
+		    <td>15:00</td>
+		    <td>15:50</td>
+		    <td>
+		      <div class="session-title">Keynote #2</div>
+		      <div class="session-talk talk">Jeroen Ooms</div>
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>15:50</td>
+		    <td>16:15</td>
+		    <td><div class="session-title">Coffee break</div></td>
+		  </tr>
+		  <tr>
+		    <td>16:15</td>
+		    <td>17:35</td>
+		    <td>
+		      <div class="session-title">Machine Learning session</div>
+
+		      <div class="session-talk talk">Jo-fai (Joe) Chow: Scalable Machine Learning with H2O</div>
+		      <div class="session-abstract abstract"></div>
+
+		      <div class="session-talk talk">Andrew Lowe: Machine learning for particle physics using R</div>
+		      <div class="session-abstract abstract">
+			<p>Search strategies for new subatomic particles often depend on being able to efficiently discriminate between signal and background processes. Particle physics experiments are expensive, the competition between rival experiments is intense, and the stakes are high. This has lead to increased interest in advanced statistical methods to extend the discovery reach of experiments. This talk will present a walk-through of the development of a prototype machine learning classifier for differentiating between decays of quarks and gluons at experiments like those at the Large Hadron Collider at CERN. The power to discriminate between these two types of particle would have a huge impact on many searches for new physics at CERN and beyond. I will discuss why I chose to perform this analysis in R and how switching to R has helped my work.</p>
+		      </div>
+
+		      <div class="session-talk talk">Ágoston Török: Time series analysis in R: using hidden Markov models for unsupervised learning</div>
+		      <div class="session-abstract abstract">
+			<p>Analyzing time series data is imminent in econometrics, weather forecasting, speech analysis, biosignal processing, and several other disciplines.  Time series analysis consists of  multiple techniques for data cleaning and pattern recognition. In this talk, I will present hidden Markov modelling (HMM) — a common unsupervised learning method — and show how it can facilitate the discovery of meaningful patterns in time series data. Hidden emotional and cognitive states were explored using the depmixS4 package in R (Visser & Speekenbrink, 2016, doi: 10.18637/jss.v036.i07) in a dataset of multimodal (EEG, GSR, HR) recordings while participants watched emotional videos. Using hidden Markov modelling we were able to identify emotional states and their dynamic transitions. We will discuss the issues of validation, reliability, and limitations of this approach and its implementation.</p>
+		      </div>
+
+		      <div class="session-talk talk">Thomas Levine: Practical music synthesis for multivariate data analysis in R</div>
+		      <div class="session-abstract abstract">
+			<p>With modern advances in computing and the increasing abundance of digital data, it is becoming both feasible and necessary to expand our data analysis methods beyond conventional mathematical modeling and data visualization. Music and other emerging data analysis paradigms present the opportunity to represent high-dimensional data in intuitive and accessible forms. In this talk I will introduce the concept of plotting data as music and demonstrate some end-user music synthesis tools that are available within the R ecosystem.</p>
+		      </div>
+		      
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>17:45</td>
+		    <td>18:15</td>
+		    <td><div class="session-title">Coffee break</div></td>
+		  </tr>
+		  <tr>
+		    <td>18:15</td>
+		    <td>18:40</td>
+		    <td>
+
+		      <div class="session-title">Lightning talks</div>
+
+		      <div class="session-talk talk">Áine Uí Ghiollagáin: RUG Toolbox</div>
+		      <div class="session-abstract abstract">
+			<p>R is (for some of us at least) easier to use than to learn. It can also be difficult to keep up with new packages and other developments. R User Groups can help with both these challenges, as well as help members develop other skills (presentation, organisation, and networking), yet there is little enough helpful administrative or other support (templates, suggestions, or policies) for new and established groups. This lightning talk proposes to introduce the framing of a RUG Toolbox, a collection of templates and case studies, contributed by R users and R user groups, collated and made available on GitHub, which can help groups start, plan, develop and join R networks locally and further afield.</p>
+		      </div>
+		      
+		      <div class="session-talk talk">Viktor Tachev: The effect of High-Frequency Trading activity on volatility in systemically important ETFs</div>
+		      <div class="session-abstract abstract">
+			<p>The aim of the research paper is to track the relationship between the rapidly-growing High-Frequency Trading activity and the dynamics in volatility levels for the most actively traded and systemically important ETFs. The source for the intraday data that I work with is Bloomberg®. The time period is 2006 - 2016. The summarized research methodology is as follows:</p>
+			  <ul>
+			    <li>Measuring Volatility with the Yang-Zhang Volatility Estimator;</li>
+			    <li>Engle-Granger Cointegration Tracking via different tests - ADF, Phillips-Perron, PGFF, ERSD, JOT, SPR; </li>
+			  <li>Testing for Granger Causality</li>
+			  <li>GARCH Modeling;</li>
+			  </ul>
+			<p>The generated results indicate that HFT activity results in increased volatility in more than 70% of the analyzed ETFs, directly affecting other investors, including pension funds and insurance companies.</p>
+			<p>R Packages used: tseries; zoo; xts; quantmod; timeSeries; TTR; PerformanceAnalytics; lmtest; vars; egcm; rugarch</p>
+		      </div>
+
+		      <div class="session-talk talk">Zsuzsanna Szabó: Visualization of geochemical modeling results by R</div>
+		      <div class="session-abstract abstract">
+			<p>I use the software PHREEQC for modeling rock-water interactions. The output of these geochemical models are several types of complex data tables depending on weather I run thermodynamic mixing, kinetic and reactive transport models. By the increasing number of model runs, automatization of the figure production, easy visualization of output sensitivity on model parameters became necessary, as well as presentation of reactive transport of water in rock by not only figures, but also GIF animations. For these, I use R packages dplyr, reshape2, ggplot2, animation and graphics. I present code, the resulting figures and GIF animations of chemical changes in water while it flows through cells of defined rock, as well as indicated mineral dissolution and precipitation processes in space and time. I also mention R packages PHREEQC and ReacTran to better present the capability of R in the field of geochemistry.</p>
+		      </div>
+
+		      <div class="session-talk talk">Iegor Rudnytskyi: estudy2: an R package for the event study</div>
+		      <div class="session-abstract abstract">
+			<p>The impact of relevant events on the stock market valuation of companies has been the subject of many studies. An event study is a statistical toolbox that allows to examine the impact of certain events on the firms' stock valuation. Given the rationality of market participants, the prices of securities immediately incorporate any relevant announcements, information, and updates.</p>
+			<p>The idea of the event study is to compare the market valuation of the companies during periods related to an event and other (non-event linked) periods. If the behavior of stocks is significantly different in the event-period, then we conclude that an event produces an impact on the market valuation, otherwise we conclude that there is no effect.</p>
+			<p>The major stream of research is focused on the insurance industry and catastrophe events, therefore, the cross-sectional dependence cannot be neglected. Furthermore, the returns typically are not normally distributed. These points lead to misspecification of the classical parametric tests, and require to validate the results by more tailored and accurate tests (both parametric and nonparametric).</p>
+			<p>In order to incorporate all these issues we developed the package estudy2 (planned to be submitted to CRAN by August 2016). First, estudy2 incorporates all technical aspects of the rate of return calculation (the core computation is done in C++ by using Rcpp). Also the package incorporates 3 traditional market models: mean-adjusted returns, market-adjusted returns, single-index market model.</p>
+			<p>Finally, 6 parametric and 6 nonparametric tests of daily cross-sectional abnormal return have been implemented. In addition, the package contains the tests for cumulative abnormal returns (CAR).</p>
+			<p>In the proposed talk we demonstrate an example from current research, namely, the impact of major catastrophes on insurance firms' market valuation in order to validate the specification of the tests.</p>
+		      </div>
+
+		      <div class="session-talk talk">Jenő Pál: Uncovering political connections of firms using machine learning methods</div>
+		      <div class="session-abstract abstract">
+			<p>Political connections can have a profound influence on the success and profitability of firms. However, discovering these connections are difficult since firms typically try to hide their political ties from the public. We link data on local and parliamentary elections to administrative data about firms to create features that can be indicative of political connections. Applying machine learning algorithms we build classification models with the goal of identifying political leaning of Hungarian firms at a large scale.</p>
+			<p>We use R for all parts of the project, starting from data wranging through visualization to building and evaluating machine learning models. Packages used include data.table, dplyr, ggplot2 and caret.</p>
+		      </div>
+
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>18:40</td>
+		    <td>19:20</td>
+		    <td>
+
+		      <div class="session-title">R use-cases session</div>
+
+		      <div class="session-talk talk">Jen Stirrup: R and Python -- PoweR Tools to make you a Data RockstaR</div>
+		      <div class="session-abstract abstract">
+			<p>R and Python are your secret poweR tools for data RockstaRdom. Together, these tools equip enterprises to deliver real, robust predictive analytics. We will look at how these PoweR tools can complement each other in practical situations.</p>
+			<p>This is an intensive, practical session with relatable examples to empower business intelligence professionals to move into the realm of predictive analytics, making the ability to deliver enterprise, actionable analytics accessible to everyone.</p>
+		      </div>
+
+		      <div class="session-talk talk">Kate Ross-Smith: How can I get everyone else in my organisation to love R as much as I do?</div>
+		      <div class="session-abstract abstract">
+			<p>Learning R is dangerous. It entices us in by presenting an incredibly powerful tool to solve our particular problem; for free! And as we learn how to do that, we uncover more things that make our solution even better. But then we start to look around our organisation or institution and see how it could make everyone's lives better too. And that's the dangerous part; R's got us hooked and we can't give up the belief that everyone else should be using this, right now. Even though R is free, open source software, there are often barriers to introducing it organisation-wide. This could be because of such things as IT or quality policies, the need for management buy-in or because of perceptions in learning the language. This presentation will first discuss the aspects required to understand these barriers to entry, and the different types of resolution for these. It will then use three projects to show how, by understanding the requirements of the organisation, and developing situation-specific roll-out strategies, these barriers to entry can be overcome. The first example is a large organisation who wanted to quickly (within 6 weeks) show management how Shiny could improve information dissemination. As server policies made a proof of concept difficult to run internally, this project used a cloud hosted environment for R, Shiny and a source database. The second example is around two SME's who required access to a validated version of R, which was provided via the Amazon and Azure marketplaces. The key aspect of these projects is the value to IT departments of being able to distribute a pre-configured machine around the organisation.</p>
+		      </div>
+		      
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>19:20</td>
+		    <td>20:00</td>
+		    <td>
+		      <div class="session-title"><a href="#datavizcompo">Data Visualization Challenge</a> with pizza on the side</div>
+		    </td>
+		  </tr>
 		</tbody>
 	      </table>
 
