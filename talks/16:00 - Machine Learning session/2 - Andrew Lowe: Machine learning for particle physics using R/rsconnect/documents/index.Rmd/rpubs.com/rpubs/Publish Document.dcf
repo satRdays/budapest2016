@@ -1,0 +1,7 @@
+name: Publish Document
+account: rpubs
+server: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/206077/f54d6018abd241c59ca7d97c2aa79c03
+bundleId: https://api.rpubs.com/api/v1/document/206077/f54d6018abd241c59ca7d97c2aa79c03
+url: http://rpubs.com/andrewjohnlowe/206077
+when: 1472863180.32274

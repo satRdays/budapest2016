@@ -1,0 +1,411 @@
+```{r, echo = FALSE}
+# http://rstudio-pubs-static.s3.amazonaws.com/27777_55697c3a476640caa0ad2099fe914ae5.html#/9
+# http://rmarkdown.rstudio.com/ioslides_presentation_format.html
+
+# https://github.com/nmdp-bioinformatics/HiddenMarkovLecture/
+# https://github.com/RobHayward/Dependent-Mixed-Model/blob/master/LondonR/Document.pdf
+# https://github.com/ChicagoBoothML/MachineLearning_Fall2015/tree/fdf2146eb881f0c7e109c338f12d52f64cf947b8/Programming%20Scripts/Lecture09
+# https://github.com/ChicagoBoothML/MachineLearning_Fall2015/blob/fdf2146eb881f0c7e109c338f12d52f64cf947b8/docs/Syllabus.md
+# https://github.com/cran/depmixS4
+
+library(lubridate)
+library(reshape2)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+library(zoo)
+library(depmixS4)
+library(scales)
+library(dplyr)
+library(magrittr)
+library(tibble)
+library(tidyr)
+```
+
+<style>
+.footer {
+    color: #333333;
+    position: fixed;
+    top: 85% !important;
+    text-align:right;
+    width:100%;
+}
+.subtitle {
+    color: #333333;
+    font-size : 40em;
+}
+
+.reveal h1,  .reveal h3 {
+  color: #ff5000;
+  word-wrap: normal;
+  -moz-hyphens: none;
+  font-size : 2em;
+}
+
+.reveal h2 {
+  font-size : 1.5em;
+}
+
+
+.section .reveal .state-background {
+    background: #FF5000;
+    background-image: url("satRday_talk-figure/r-brain-back.png");
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    background-attachment: fixed;
+    background-position: right right; 
+}
+    
+    
+
+</style>
+
+Time Series Analysis In R
+========================================================
+autosize: true
+width: 1920 
+height: 1080
+
+<div class="subtitle">
+  <font size="300">
+      Using Hidden Markov Models <br>
+      For Unsupervised Learning
+    <br>
+  </font>
+</div>
+
+
+<p align="left", color="#ff5000">
+     <font size="300">
+    Agoston Torok 
+    </font>
+     <br> @torokagoston <br> <br> <br>
+    data scientist @SynetiqLab
+</p>
+
+<div class = "footer">satRday conference <br>Budapest, 09/03/2016<br>slides: https://github.com/Synetiq/satRdays_talk</div>
+
+
+<head>
+  <script type="text/javascript"
+     src="https://d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+</head>
+
+
+Time series analysis
+========================================================
+<hr>
+
+## Time series: 
+<center><i>A series of datapoints in time order</i> </center>
+
+## Methods of time series analysis:
+- Season trend decomposition (e.g. [STL](http://www.wessa.net/download/stl.pdf))
+- Autoregressive modeling (AR, ARMA, ARIMA)
+- State space models (e.g. [HMM](https://cran.r-project.org/web/packages/depmixS4/vignettes/depmixS4.pdf))
+
+***
+
+![.](http://www.delta-alliance.org/gfx_content/images/Nile%20Delta.jpg)
+```{r, echo = FALSE}
+# The first is very good for analysing signals that can be decomposed to stationary and non-stationary components
+# trend, regime and season are all non-stationary processes
+```
+
+```{r, echo=FALSE, fig.width=30, fig.align="center"}
+autoplot(as.zoo(Nile), geom = "line") + scale_x_yearmon() + theme_bw(base_size = 50) +labs(y="Flow", x="Year", title="Flow of the Nile")
+```
+
+<div class="footer">@torokagoston</div>
+
+A (very) short intro to hidden Markov models
+========================================================
+<hr>
+We hypothesize latent states/regimes in the time series (for example past flow and tree rings [[1](https://www.cs.sjsu.edu/~stamp/RUA/HMM.pdf)])
+
+$$ \begin{array} & X_{1}\overset{P_T}{\longrightarrow} & X_{2}\overset{P_T}{\longrightarrow} & \dots  \overset{P_T}{\longrightarrow} & X_N\\ 
+\downarrow P_O & \downarrow P_O & & \downarrow P_O \\ 
+O_1 & O_2 & \dots & O_N\end{array} $$
+
+- We cannot directly observe the $X$ time series, but we can infer it 
+- We have a series of $O$ observations resulting from $X$ latent states
+- Based on the $P_T$ transition probability matrix, and $P_O$ probability matrix
+- Passes between $O$, $X$, and $Model$ 
+
+![.](http://homepages.inf.ed.ac.uk/jeh/Markov/index_files/image001.jpg)
+![.](http://scienceline.org/wp-content/uploads/2007/03/fir.jpg)
+
+
+```{r, echo=FALSE, eval=FALSE}
+# alpha pass is called the forward pass (this is a recursive approach), "The executive
+# summary is that a DP can be viewed as an α-pass where “sum” is replaced by “max."
+# beta pass is the backward pass
+
+```
+
+<div class="footer">@torokagoston</div>
+
+
+Human biosignals and HMM
+========================================================
+<hr>
+
+## Has been used to find patterns in:
+- EEG (sleep cycles) [[3](http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=1224760&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D1224760http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=1224760&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D1224760), [4](http://link.springer.com/article/10.1007/s11517-012-0871-2)]
+- Eye movements (face recognition) [[5](http://jov.arvojournals.org/article.aspx?articleid=2193875)]
+- Heart rate (cardiac events) [[6](http://www.inderscienceonline.com/doi/abs/10.1504/IJBET.2010.032695)]
+
+<div class="footer">@torokagoston</div>
+
+Can we use it to recognise emotional states?
+========================================================
+<hr>
+- Results show that emotions have different physiological correlates [[7](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0066032)] 
+- It is reasonable to say that the transition probabilities are not uniform
+- Some emotions lasts longer (fear), others fade rather fast (surprise)
+
+
+<br><br><br><br><br>
+<p align="center"; style="font-style: italic; font-size:1.2em"> "Emotions are just as easy to access as any Higgs boson." </p>
+
+```{r, echo=FALSE, evaluate=FALSE}
+# They both affect life, we experience them everyday, we all have theories of how they work, but scientifical study of them requires several work hours of a bunch of scientist and a couple million euros
+```
+
+<div class="footer">@torokagoston</div>
+
+
+The dataset
+========================================================
+<hr>
+
+
+## Emotional reactions to [Paperman (2012, dir: John Kahrs)] (http://www.imdb.com/title/tt2388725/)
+<img src="paperman_90_95.gif" width="400"/>
+
+<div style="width: 100%; position: fixed">
+```{r, echo=FALSE, fig.width=35, fig.align='center'}
+
+df <- read.csv("paperman_means.csv")
+
+plot_df <- 
+        df %>%
+        mutate(time = ISOdate(2001, 1, 1, 0, tz = "") + time) %>% # Convert to posixct
+        gather(variable, value, -time)
+
+myPlot <- 
+        plot_df %>%
+        ggplot() +
+                aes(x = time, y = value, color = variable) + 
+                geom_line(size=2) + 
+                geom_rangeframe(inherit.aes = FALSE, data=plot_df, aes(x=time, y=value)) +
+                theme_tufte(base_size=50) + 
+                labs(y="Signal", x="Time (min)", color="Measure", title="Physiological reactions")+ 
+                guides(color = guide_legend(title=NULL, keyheight = 3))
+print(myPlot)
+
+```
+</div>
+
+*** 
+<hr>
+## Psychophysiological recordings
+- N = 62 (~60% female, 18-35 years old)
+- **FEA** Frontal EEG asymmetry
+- **RMSSD** Heart rate variability
+- **NSCR** Skin conductance
+
+<div class="footer">@torokagoston</div>
+
+Why depmixS4?
+========================================================
+<hr>
+
+**Dep**endent **mix**ture models by [Ingmar Visser](http://www.ingmar.org/) and [Maarten Speekenbrink](https://www.ucl.ac.uk/pals/research/experimental-psychology/person/maarten-speekenbrink/)
+
+ - custom constraints
+ - covariates (time dependent $P_T$)
+ - custom distribution families
+ - prior, transition and response model
+ 
+```{r, echo=FALSE}
+# prior and transition are logictic models
+# response is a general linear
+```
+
+ 
+***
+```{r, fig.align='center'}
+# given two distributions
+set.seed(69)
+a = rnorm(1000, mean=5, sd=3)
+b = rnorm(1000, mean=25, sd=9)
+
+# their joint distribution on histogram
+qplot(c(a,b), binwidth = 2, geom = "histogram") + theme_tufte()
+
+```
+
+<div class="footer">@torokagoston</div>
+
+
+Using depmixS4 for uncovering emotional states
+========================================================
+<hr>
+
+- Unsupervised learning
+- Caution: the fitting algorithm not necessarily recovers the meaningful states --> Setup
+
+```{r, warning=FALSE}
+library(depmixS4)
+expectedNumberOfStates <- 4
+set.seed(6) # Make the random number reproducible
+
+myModel <- depmix(list(FEA~1, RMSSD~1, NSCR~1), data=df, # the formulae
+              nstates=expectedNumberOfStates, # the number of hidden states we assume
+              instart = c(1,0,0,0), # assume that we start from state 1
+              trstart = runif(expectedNumberOfStates^2), # this is an N x N matrix
+              family = rep(list(gaussian()),3)) # families of the responses/observations
+
+
+#fit the model 
+fittedMyModel <- fit(myModel, verbose = FALSE) # if verbose=TRUE it shows the status at every 5th iteration
+```
+
+```{r, echo=FALSE}
+# note we can have a stronger starting transition contastrain e.g. c(0.95,0.05,0,1) but we assume emotions here to be changing rapidly
+
+# the intercept is not necesarrily alone, you could specify other contributors that modulate the responses
+```
+
+<div class="footer">@torokagoston</div>
+
+The fitted model
+========================================================
+<hr>
+
+```{r}
+summary(fittedMyModel) 
+```
+
+Does it make any sense?
+========================================================
+<hr>
+
+- The same participants watched the movie a 2nd time
+- Button press for positive and negative feelings
+- Curve for summed feeling
+- Colors are different states
+
+```{r, echo=FALSE, fig.width=35, fig.height=3}
+df$estimatedHiddenStates <- as.character(posterior(fittedMyModel)$state)
+df$estimatedHiddenStates <- factor(df$estimatedHiddenStates, c("1", "2", "3", "4"), c("Green state", "Blue state", "Red state", "Grey state"))
+colors = c("springgreen4","darkslateblue","red","grey") 
+
+combiPlot <-
+        df %>%
+        inner_join(read.csv("emotionality_means.csv"), by = c("time" = "epoch_rel") ) %>%
+        mutate(time = ISOdate(2001, 1, 1, 0, tz = "") + time) %>%
+        ggplot() +
+                aes(x = time, y = ButtonPresses) +
+                geom_bar(aes(y = 1.5, fill = estimatedHiddenStates, color = estimatedHiddenStates), stat = "identity") +
+                geom_bar(aes(y = -1.5, fill = estimatedHiddenStates, color = estimatedHiddenStates), stat = "identity", position = "dodge") +
+                geom_hline(yintercept = 0, linetype = "dashed") + # Baseline
+                geom_line(color = "#000000", size = 1.2) +
+                scale_x_datetime("Time (m:s)", labels = date_format("%M:%S"), date_breaks = "30 sec", expand = c(0,0)) +
+                scale_y_continuous("Emotion") +
+                scale_fill_manual(values = colors, guide = FALSE) + 
+                scale_color_manual(values = colors, guide = FALSE) +
+                theme_tufte(base_size = 30)
+
+if (!file.exists("combi_plot_paperman.jpg")){        
+                ggsave( plot = combiPlot,
+                        filename = "combi_plot_paperman.jpg",
+                        width = 35,
+                        height = 6
+                        )
+}
+ 
+```
+<p style="text-align:center;"><img src="combi_plot_paperman.jpg"/> 
+</p>
+
+<p style="text-align:center;">
+<img src="paperman_20_25.gif" width="400" />
+<img src="paperman_90_95.gif" width="400"/>
+<img src="paperman_167_172.gif" width="400"/>
+<img src="paperman_295_299.gif" width="400"/></p>
+
+```{r, echo=FALSE, evaluate=FALSE}
+# - How many states? (AIC, Log-likelihood)
+# - Are there states?
+```
+
+<div class="footer">@torokagoston</div>
+
+Emotional states and physiology
+========================================================
+<hr>
+
+```{r, echo=FALSE, fig.height=15, fig.width=32}
+colors = c("grey","red","orange","yellow") 
+
+df %>%
+        inner_join(read.csv("emotionality_means.csv"), by = c("time" = "epoch_rel") ) %>%
+        filter(time<364) %>%
+        gather(metric, value, -time, -MediaName, -estimatedHiddenStates) %>%
+        group_by(metric, estimatedHiddenStates) %>%
+        summarize(Mean = mean(value, na.rm = TRUE),
+                  Sd = sd(value, na.rm = TRUE),
+                  N = n(),
+                  Se = Sd/sqrt(N)) %>%
+        ggplot() +
+        aes(x = estimatedHiddenStates, y = Mean, group = metric, fill = metric) +
+        geom_bar(stat = "identity", position = "dodge") +
+        geom_errorbar(aes(ymin = Mean - Se, ymax = Mean + Se), position = "dodge") +
+        scale_fill_manual(values = colors) +
+        labs(x = "", y = "Mean (SE)", title = "Average values of the psychophysiological recordings by emotional states") +
+        theme_tufte(base_size = 50)
+
+```
+<div class="footer">@torokagoston</div>
+
+Conclusions
+========================================================
+<hr>
+
+- We were able to uncover emotional states
+- The emotional states made sense 
+- And were consistent with self-report data
+
+# Future directions
+- Everyone experience emotions somewhat differently
+- Personalized content, storyline
+- Targeted advertising: neuromarketing
+
+<div class="footer">@torokagoston</div>
+
+========================================================
+<hr>
+<br><br><br><br>
+# Thank you for your attention!
+
+<br>
+@agostontorok
+
+References
+========================================================
+[Stamp, M. (2004). A revealing introduction to hidden Markov models. Department of Computer Science San Jose State University.](https://www.cs.sjsu.edu/~stamp/RUA/HMM.pdf)
+
+[Visser, I., & Speekenbrink, M. (2010). depmixS4: An R-package for hidden Markov models. Journal of Statistical Software, 36(7), 1-21.](http://dare.uva.nl/record/1/336266)	
+
+[Lee, H., & Choi, S. (2003). Pca+ hmm+ svm for eeg pattern classification. In Signal Processing and Its Applications, 2003. Proceedings. Seventh International Symposium on (Vol. 1, pp. 541-544). IEEE.](http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=1224760&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D1224760http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=1224760&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D1224760)
+
+[Lederman, D., & Tabrikian, J. (2012). Classification of multichannel EEG patterns using parallel hidden Markov models. Medical & biological engineering & computing, 50(4), 319-328.](http://link.springer.com/article/10.1007/s11517-012-0871-2)
+
+[Chuk, T., Chan, A. B., & Hsiao, J. H. (2014). Understanding eye movements in face recognition using hidden Markov models. Journal of vision, 14(11), 8-8.](http://jov.arvojournals.org/article.aspx?articleid=2193875)
+
+[Mendez, M. O., Matteucci, M., Castronovo, V., Ferini-Strambi, L., Cerutti, S., & Bianchi, A. (2010). Sleep staging from heart rate variability: time-varying spectral features and hidden Markov models. International Journal of Biomedical Engineering and Technology, 3(3-4), 246-263.](http://www.inderscienceonline.com/doi/abs/10.1504/IJBET.2010.032695)
+
+[Kassam, K. S., Markey, A. R., Cherkassky, V. L., Loewenstein, G., & Just, M. A. (2013). Identifying emotions on the basis of neural activation. PloS one, 8(6), e66032.](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0066032)

@@ -1,0 +1,141 @@
+---
+title: "Emotional state analysis"
+author: "Agoston Torok"
+date: '2016 April 27 '
+output: html_document
+---
+
+## Dependencies
+
+We need to install depmixS4, this package does the HMM fitting, for further info visit the [authors introduction](https://cran.r-project.org/web/packages/depmixS4/vignettes/depmixS4.pdf). 
+
+```{r setup, include=FALSE}
+if (!require(depmixS4)) {
+  install.packages('depmixS4', verbose = F, quiet = T)
+}
+library(ggplot2)
+library(reshape2)
+library(car)
+```
+
+The data I use for the modeling is the averaged metrics second by second. I use this to find out the optimal number of emotional states. Then these state parameters will be used to predict the state sequence of individuals. The dependent variables I use to find correlation between states and behaviour are:
+- GoFor
+
+```{r cars}
+df <- read.csv('emotional_state_analysis/average_metrics.csv')
+training_sequence <- df[,c("FEA_std","SCR_std","SCL_std_prevblcorr","RMSSD_std_globalblcorr")]  
+training_sequence <- training_sequence[complete.cases(training_sequence),]
+plot_data <- melt(training_sequence)
+qplot(data =plot_data, x = value) + geom_histogram(stat= 'bin', bins = 100) + facet_wrap(~variable, scales = 'free') 
+
+```
+
+The actual model fitting. I prepare the formula first, and then look for the optimal number of states that would explain sufficient amount of the variance. Importantly, this whole method is based on the assumption that we can find quasi stable **states** in the physiological changes.  
+
+```{r echo=FALSE}
+list_of_formula <- c(NULL)
+for (col in colnames(training_sequence)){
+  list_of_formula <- c(list_of_formula,list(as.formula(paste(col,"~1"))))
+}
+
+bic_list <- c(NULL)
+for (number_of_states in c(2:13)) {
+     hidden_markov_model <- depmix(list_of_formula, data=training_sequence, 
+        family = rep(list(gaussian()),length(list_of_formula)),
+        nstates=number_of_states, trstart = runif(number_of_states^2))
+
+    #fit the model 
+    f <- fit(hidden_markov_model, verbose = F)
+    bic_list[number_of_states] = BIC(f)
+}
+
+# plot optimum 
+qplot(x = c(1:length(bic_list)), y = bic_list, geom = c('line','point')) + 
+  geom_point(aes(x = which.min(bic_list), y = min(bic_list, na.rm = TRUE)), size = 5, color = 'red') +
+  annotate('text', x = length(bic_list)/2, y = mean(bic_list[1:4], na.rm = TRUE), label = 'Optimum reached at', hjust = 0.5, vjust = 0) + 
+  geom_segment(aes(x = length(bic_list)/2, y = mean(bic_list[1:4], na.rm = TRUE), 
+                   xend = which.min(bic_list), yend = min(bic_list, na.rm = TRUE)), arrow = arrow()) +
+  theme_classic() + xlab('Number of states') + ylab('Bayesian Information Criteria')
+
+optimal_number_of_states <- which.min(bic_list)
+
+hidden_markov_model <- depmix(list_of_formula, 
+                              data=training_sequence, 
+                              family = rep(list(gaussian()),length(list_of_formula)),
+                              nstates=optimal_number_of_states, 
+                              trstart = runif(optimal_number_of_states^2))
+
+fitted_hmm <- fit(hidden_markov_model, verbose = F)
+hmm_parameters <- getpars(fitted_hmm)
+state_probabilities <- posterior(fitted_hmm)
+```
+
+We can visualize the state transitions, but here it is probably more interesting to look at how the GoFor variable changes in the different states
+
+```{r model, echo=FALSE}
+# save state characteristics
+
+df$States <- state_probabilities$state
+
+# apply forward fill to get a value for each time point
+library(zoo)
+df$How_far_would_you_go <- na.locf(df$How_far_would_you_go)
+
+# plot the state characteristics
+qplot(x =States, y = How_far_would_you_go, data = df, group = States, colour = factor(States), geom = c('violin','jitter')) + theme_classic()
+
+```
+
+Let's read the full dataset and predict the hidden states for that too
+
+```{r}
+df_all <- read.csv('emotional_state_analysis/raw_metrics_and_questionnaire.csv')
+test_sequence <- df_all[,c("FEA_std","SCR_std","SCL_std_prevblcorr","RMSSD_std_globalblcorr")]
+test_sequence <- test_sequence[complete.cases(test_sequence),]
+
+# test sequence is very long so batch prediction
+length_of_data <- nrow(test_sequence)
+extra_points <- length_of_data %% 10
+batches <- matrix(c(1:(length_of_data+extra_points)), ncol = 10)
+
+test_sequence$State  <- NULL
+# predict
+# we can't predict like this we need to minimize it in bounds, now many datapoints are out of bounds.
+for (i in 1:nrow(test_sequence)){
+  #nrow(test_sequence))
+  hidden_markov_model <- depmix(list_of_formula, 
+                                data=test_sequence[i,1:4], 
+                                family = rep(list(gaussian()),length(list_of_formula)),
+                                nstates=optimal_number_of_states, 
+                                trstart = runif(optimal_number_of_states^2))
+  hidden_markov_model <- setpars(hidden_markov_model, getpars(fitted_hmm))
+  try(state_probabilities <- viterbi(hidden_markov_model))
+  try(test_sequence[i,'State'] <- state_probabilities$state)
+}
+
+```
+
+Fit function to data instead of prediction. Note, this is the actual hidden markov modeling, the other method was a viterbi reconsructruction of multiple dependent markovian processes. 
+
+```{r}
+df_all <- read.csv('emotional_state_analysis/raw_metrics_and_questionnaire.csv')
+test_sequence <- df_all[,c("FEA_std","SCR_std","SCL_std_prevblcorr","RMSSD_std_globalblcorr")]
+test_sequence <- test_sequence[complete.cases(test_sequence),]
+
+hidden_markov_model <- depmix(list_of_formula, 
+                              data=test_sequence, 
+                              family = rep(list(gaussian()),length(list_of_formula)),
+                              nstates=optimal_number_of_states, 
+                              trstart = runif(optimal_number_of_states^2))
+fitted_hmm <- fit(hidden_markov_model, verbose = F)
+hmm_parameters <- getpars(fitted_hmm)
+state_probabilities <- posterior(fitted_hmm)
+df_all$States <- state_probabilities$state
+
+# apply forward fill to get a value for each time point
+library(zoo)
+df_all$How_far_would_you_go <- na.locf(df_all$How_far_would_you_go)
+
+# plot the state characteristics
+qplot(x =States, y = How_far_would_you_go, data = df_all, group = States, colour = factor(States), geom = c('violin','jitter')) + theme_classic()
+```

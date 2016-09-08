@@ -1,0 +1,622 @@
+---
+title: "Machine learning for particle physics using R"
+author: Andrew John Lowe
+date: 3 September 2016
+output:
+  revealjs::revealjs_presentation:
+    incremental: false
+    theme: league
+    highlight: espresso
+    center: true
+    transition: fade
+    mathjax: null
+    reveal_options:
+      slideNumber: true
+    fig_caption: true
+---
+<style>
+.reveal {
+  font-size: 2em;
+}
+.white figure img {
+  background: white;
+}
+html.blur .backgrounds {
+   -webkit-filter: blur(4px) saturate(.5) brightness(.7);
+   -moz-filter: blur(4px) saturate(.7) brightness(.8);
+   -o-filter: blur(4px) saturate(.7) brightness(.8);
+   -ms-filter: blur(4px) saturate(.7) brightness(.8);
+   filter: blur(4px) saturate(.7) brightness(.8);
+}
+html.dim .backgrounds {
+   -webkit-filter: saturate(.5) brightness(.7);
+   -moz-filter: saturate(.7) brightness(.8);
+   -o-filter: saturate(.7) brightness(.8);
+   -ms-filter: saturate(.7) brightness(.8);
+   filter: saturate(.7) brightness(.8);
+}
+@-webkit-keyframes blur-animation {
+  0% {
+    -webkit-filter: blur(0px) ;
+    -moz-filter: blur(0px);
+    -o-filter: blur(0px);
+    -ms-filter: blur(0px);
+    filter: blur(0px);
+
+  }
+  100% {
+    -webkit-filter: blur(5px) saturate(.5) brightness(.5);
+    -moz-filter: blur(6px) saturate(.7) brightness(.6);
+    -o-filter: blur(6px) saturate(.7) brightness(.6);
+    -ms-filter: blur(6px)saturate(.7) brightness(.6);
+    filter: blur(6px) saturate(.7) brightness(.6);
+
+  }
+}
+html.background-blur-animation .backgrounds {
+   -webkit-animation-name: blur-animation;
+   -webkit-animation-duration: 3s;
+   -webkit-animation-iteration-count: 1;
+   -webkit-animation-direction: alternate;
+   -webkit-animation-timing-function: ease-out;
+   -webkit-animation-fill-mode: forwards;
+   -webkit-animation-delay: 0s;
+ }
+</style>
+
+## Introduction: about this talk
+
+* I'm a particle physicist, programmer, and aspiring data scientist
+      * Worked for 10 years on the development of core software and algorithms for a multi-stage cascade classifier that processes massive data in real-time (60 TB/s)
+      * Previously a member of team that discovered the Higgs boson
+      * I now work on using advanced machine learning techniques to develop classification algorithms for recognising subatomic particles based on their decay properties
+* I'm going to talk about how switching to **R** has made it easier for me to ask more complex questions from my data than I would have been able to otherwise
+
+## What is particle physics? {data-background="particle-collide.png" data-state="background-blur-animation"}
+
+- The study of subatomic particles and the fundamental forces that act between them
+- Present-day particle physics research represents man's most ambitious
+and organised effort to answer the question: *What is the universe made
+of?*
+- We have an extremely successful model that was developed throughout the mid to late 20th century
+- But many questions still remain unanswered
+    * Doesn't explain: gravity, identity of dark matter, neutrino oscillations, matter/antimatter asymmetry of universe ...
+- To probe these mysteries, we built the Large Hadron Collider
+
+## {data-background="ring.jpg"}
+
+## {data-background="lhc-anim.gif"}
+
+
+## LHC data flow {data-background="cern-servers.jpg" data-state="background-blur-animation"}
+1. Detected by LHC experiment
+2. Online multi-level filtering (hardware and software)
+3. Transferred to Worldwide Computing Grid, processed in stages:
+    * Tier-0: CERN (Geneva) and Wigner RCP (Budapest)
+    * Tier-1: about a dozen large data centres located worldwide
+    * Tier-2: institute and university clusters
+4. Users run large analysis jobs on the Grid
+5. Data written to locally-analysable files, put on PCs
+6. Turned into plot in a paper
+
+
+---
+![](root6-banner.png)
+
+- For experimental particle physics, [ROOT](http:://root.cern.ch) is the ubiquitous data analysis tool, and has been for the last 20 years old
+- Command language: CINT/CLANG ("interpreted C++") or Python
+    * Small data: work interactively or run macros
+    * Big data: compile with ROOT libraries, run on Grid
+- Data format optimised for large data sets
+- Complex algorithms are difficult to do interactively
+- End up writing huge C++ programs
+- Lots of tweaking, endless edit-compile-run loops
+- The ROOT developers' vision of what constitutes a good data visualisation is somewhat differently aligned from that of the average particle physicist...
+<br>
+
+
+## ROOT data visualisation
+
+![From [ROOT Project Statistics](https://root.cern.ch/project-statistics) webpage](ftpstats4.gif)
+
+## A plot from ROOT, after a lot more work
+
+Physicists end-up using experiment-approved macros to format plots for publication --- can be difficult to figure out how to do this yourself
+
+```{r fig.align='center', fig.height=4.5, echo=FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.cap="<small>From results presented this summer at the International Conference on High-Energy Physics, Chicago</small>"}
+require(png)
+require(grid)
+img <- readPNG("fig1.png")
+grid.raster(img)
+```
+
+
+## ROOTR: A ROOT interface to R
+
+* [ROOTR](https://root.cern.ch/doc/master/md_bindings_r_doc_users-guide_ROOTR_Users_Guide.html) is a very new interface in ROOT to call R functions using an R C++ interface (**Rcpp**)
+* You can now call R functions from ROOT!
+* Here's an example of creating an exponential fit to some data:
+
+```c
+#include<TRInterface.h>
+#include<TRandom.h>
+TCanvas *SimpleFitting(){
+   TCanvas *c1 = new TCanvas("c1","Curve Fitting",700,500);
+   c1->SetGrid();
+   // draw a frame to define the range
+   TMultiGraph *mg = new TMultiGraph();
+   // create the first graph (points with gaussian noise)
+   const Int_t n = 24;
+   Double_t x1[n] ;
+   Double_t y1[n] ;
+   //Generate the points along a X^3 with noise
+   TRandom rg;
+   rg.SetSeed(520);
+   for (Int_t i = 0; i < n; i++) {
+      x1[i] = rg.Uniform(0, 1);
+      y1[i] = TMath::Power(x1[i], 3) + rg.Gaus() * 0.06;
+   }
+   TGraph *gr1 = new TGraph(n,x1,y1);
+   gr1->SetMarkerColor(kBlue);
+   gr1->SetMarkerStyle(8);
+   gr1->SetMarkerSize(1);
+   mg->Add(gr1);
+      // create the second graph
+   TF1 *f_known=new TF1("f_known","pow(x,3)",0,1);
+   TGraph *gr2 = new TGraph(f_known);
+   gr2->SetMarkerColor(kRed);
+   gr2->SetMarkerStyle(8);
+   gr2->SetMarkerSize(1);
+   mg->Add(gr2);
+   //passing data to Rfot fitting
+     ROOT::R::TRInterface &r=ROOT::R::TRInterface::Instance();
+   r["x"]<<TVectorD(n, x1);
+   r["y"]<<TVectorD(n, y1);
+   //creating a R data frame
+   r<<"ds<-data.frame(x=x,y=y)";
+   //fitting x and y to X^power using Nonlinear Least Squares
+   r<<"m <- nls(y ~ I(x^power),data = ds, start = list(power = 1),trace = T)";
+   //getting the exponent
+   Double_t power;
+   r["summary(m)$coefficients[1]"]>>power;
+   TF1 *f_fitted=new TF1("f_fitted","pow(x,[0])",0,1);
+   f_fitted->SetParameter(0,power);
+   //plotting the fitted function
+   TGraph *gr3 = new TGraph(f_fitted);
+   gr3->SetMarkerColor(kGreen);
+   gr3->SetMarkerStyle(8);
+   gr3->SetMarkerSize(1);
+   mg->Add(gr3);
+   mg->Draw("ap");
+   //displaying basic results
+   TPaveText *pt = new TPaveText(0.1,0.6,0.5,0.9,"brNDC");
+   pt->SetFillColor(18);
+   pt->SetTextAlign(12);
+   pt->AddText("Fitting x^power ");
+   pt->AddText(" \"Blue\"   Points with gaussian noise to be fitted");
+   pt->AddText(" \"Red\"    Known function x^3");
+   TString fmsg;
+   fmsg.Form(" \"Green\"  Fitted function with power=%.4lf",power);
+   pt->AddText(fmsg);
+   pt->Draw();   
+   c1->Update();
+   return c1;
+}
+```
+
+## TMVA: Toolkit for Multivariate Analysis
+
+* [TMVA](http://tmva.sourceforge.net/) is ROOT's toolkit for machine learning
+* As of last year, there is a set of plugins for TMVA based on ROOTR that allow users to use R's machine learning tools in ROOT: [RMVA](http://oproject.org/RMVA)
+* Here's how you train and evaluate C5.0 in RMVA:
+
+```c
+#include <cstdlib>
+#include <iostream>
+#include <map>
+#include <string>
+
+#include "TChain.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TString.h"
+#include "TObjString.h"
+#include "TSystem.h"
+#include "TROOT.h"
+
+
+#include "TMVA/Factory.h"
+#include "TMVA/Tools.h"
+#include<TMVA/MethodC50.h>
+
+
+void c50()
+{
+   // This loads the library
+   TMVA::Tools::Instance();
+
+    // --------------------------------------------------------------------------------------------------
+
+   // --- Here the preparation phase beginshttp://oproject.org/tiki-download_file.php?fileId=6&display
+
+   // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
+   TString outfileName( "TMVA.root" );
+   TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
+
+   // Create the factory object. Later you can choose the methods
+   // whose performance you'd like to investigate. The factory is 
+   // the only TMVA object you have to interact with
+   //
+   // The first argument is the base of the name of all the
+   // weightfiles in the directory weight/
+   //
+   // The second argument is the output file for the training results
+   // All TMVA output can be suppressed by removing the "!" (not) in
+   // front of the "Silent" argument in the option string
+   TMVA::Factory *factory = new TMVA::Factory( "RMVAClassification", outputFile,
+                                               "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
+   TMVA::DataLoader *loader=new TMVA::DataLoader("dataset");
+
+
+    // Define the input variables that shall be used for the MVA training
+   // note that you may also use variable expressions, such as: "3*var1/var2*abs(var3)"
+   // [all types of expressions that can also be parsed by TTree::Draw( "expression" )]
+   loader->AddVariable( "myvar1 := var1+var2", 'F' );
+   loader->AddVariable( "myvar2 := var1-var2", "Expression 2", "", 'F' );
+   loader->AddVariable( "var3",                "Variable 3", "units", 'F' );
+   loader->AddVariable( "var4",                "Variable 4", "units", 'F' );
+
+   // You can add so-called "Spectator variables", which are not used in the MVA training,
+   // but will appear in the final "TestTree" produced by TMVA. This TestTree will contain the
+   // input variables, the response values of all trained MVAs, and the spectator variables
+   loader->AddSpectator( "spec1 := var1*2",  "Spectator 1", "units", 'F' );
+   loader->AddSpectator( "spec2 := var1*3",  "Spectator 2", "units", 'F' );
+
+     // Read training and test data
+   // (it is also possible to use ASCII format as input -> see TMVA Users Guide)
+   TString fname = "./tmva_class_example.root";
+   
+   if (gSystem->AccessPathName( fname ))  // file does not exist in local directory
+      gSystem->Exec("curl -O http://root.cern.ch/files/tmva_class_example.root");
+   
+   TFile *input = TFile::Open( fname );
+   
+   std::cout << "--- TMVAClassification       : Using input file: " << input->GetName() << std::endl;
+   
+   // --- Register the training and test trees
+
+   TTree *tsignal     = (TTree*)input->Get("TreeS");
+   TTree *tbackground = (TTree*)input->Get("TreeB");
+   
+   // global event weights per tree (see below for setting event-wise weights)
+   Double_t signalWeight     = 1.0;
+   Double_t backgroundWeight = 1.0;
+   
+   // You can add an arbitrary number of signal or background trees
+   loader->AddSignalTree    ( tsignal,     signalWeight     );
+   loader->AddBackgroundTree( tbackground, backgroundWeight );
+ 
+   
+    // Set individual event weights (the variables must exist in the original TTree)
+   //    for signal    : factory->SetSignalWeightExpression    ("weight1*weight2");
+   //    for background: factory->SetBackgroundWeightExpression("weight1*weight2");
+   loader->SetBackgroundWeightExpression( "weight" );
+   
+   
+      // Apply additional cuts on the signal and background samples (can be different)
+   TCut mycuts = ""; // for example: TCut mycuts = "abs(var1)<0.5 && abs(var2-0.5)<1";
+   TCut mycutb = ""; // for example: TCut mycutb = "abs(var1)<0.5";
+
+      // Tell the factory how to use the training and testing events
+
+// If no numbers of events are given, half of the events in the tree are used 
+   // for training, and the other half for testing:
+   //    factory->PrepareTrainingAndTestTree( mycut, "SplitMode=random:!V" );
+   // To also specify the number of testing events, use:
+   //    factory->PrepareTrainingAndTestTree( mycut,
+   //                                         "NSigTrain=3000:NBkgTrain=3000:NSigTest=3000:NBkgTest=3000:SplitMode=Random:!V" );
+   loader->PrepareTrainingAndTestTree( mycuts, mycutb,
+                                        "nTrain_Signal=0:nTrain_Background=0:SplitMode=Random:NormMode=NumEvents:!V" );
+   
+    // Boosted Decision Trees
+    // Gradient Boost
+      factory->BookMethod(loader, TMVA::Types::kBDT, "BDTG",
+                           "!H:!V:NTrees=1000:MinNodeSize=2.5%:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=20:MaxDepth=2" );
+
+      // Adaptive Boost
+      factory->BookMethod(loader, TMVA::Types::kBDT, "BDT",
+                           "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20" );
+
+      // Bagging
+      factory->BookMethod(loader, TMVA::Types::kBDT, "BDTB",
+                           "!H:!V:NTrees=400:BoostType=Bagging:SeparationType=GiniIndex:nCuts=20" );
+
+      // Decorrelation + Adaptive Boost
+      factory->BookMethod(loader, TMVA::Types::kBDT, "BDTD",
+                           "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:VarTransform=Decorrelate" );
+
+      // Allow Using Fisher discriminant in node splitting for (strong) linearly correlated variables
+      factory->BookMethod(loader, TMVA::Types::kBDT, "BDTMitFisher",
+                           "!H:!V:NTrees=50:MinNodeSize=2.5%:UseFisherCuts:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:SeparationType=GiniIndex:nCuts=20" );
+
+      factory->BookMethod(loader, TMVA::Types::kC50, "C50",
+      "!H:NTrials=10:Rules=kFALSE:ControlSubSet=kFALSE:ControlNoGlobalPruning=kFALSE:ControlCF=0.25:ControlMinCases=2:ControlFuzzyThreshold=kTRUE:ControlSample=0:ControlEarlyStopping=kTRUE:!V" );
+
+      // Train MVAs using the set of training events
+   factory->TrainAllMethods();
+
+   // ---- Evaluate all MVAs using the set of test events
+   factory->TestAllMethods();
+
+   // ----- Evaluate and compare performance of all configured MVAs
+   factory->EvaluateAllMethods();
+
+   // --------------------------------------------------------------
+
+   // Save the output
+   outputFile->Close();
+
+   std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
+   std::cout << "==> TMVAClassification is done!" << std::endl;
+
+   delete factory;
+  delete loader;
+}
+```
+
+## On C++ and data analysis {data-background="typing-fast.gif" data-state="background-blur-animation"}
+
+- Is C++ a good choice for data analysis?
+    * Spend days coding something that runs in minutes **or**
+    * Write something in a couple of hours that will run during your lunch break?
+    * Which will get you your answer faster? What strategy will help you define where you should be focusing your efforts and which paths lead to dead-ends?
+- R is a language that places higher value on development time rather than runtime: less typing for the user
+    
+## {data-background="typing.gif" data-state="background-blur-animation"}
+
+[Larry Wall](https://www.youtube.com/watch?v=LR8fQiskYII), creator of Perl, speaking about differences in the number of lines of code needed to accomplish the same task using different languages:
+
+> You can eat a one-pound stake, or a 100 pounds of shoe leather, and you feel a greater sense of accomplishment after the shoe leather, but maybe there's some downsides...
+
+
+## Why did I choose R?
+
+- Chief among those were the need for fast prototyping and high-level abstractions that let me concentrate on what I wanted to achieve, rather than on the mechanics and the highly-granular details of how I might do it
+- Incredibly easy to express what I want to achieve
+- Exponentially-growing number of add-on packages
+- Latest machine learning algorithms are available
+- Great community; about 2 million R users worldwide
+    * Technical questions are answered extremely quickly (or perhaps already answered on Stack Overflow)
+- Beautiful plots that require very little tweaking for publication
+- Fun to work with ☺
+- Haven't needed to use ROOT for well over a year --- much happier!
+
+
+## My analysis: {data-background="jets.png" data-state="background-blur-animation"}
+### Identify particles based on their decay products
+
+* Particles called **quarks** and **gluons** (collectively known as *partons*) are produced copiously in proton-proton collisions at the LHC
+* Quarks and gluons are not observed individually
+* Instead, we can only measure their decay products
+* What we observe is a cone-shaped spray of particles called a *jet*
+* The measured particles are *clustered* by a jet algorithm (somewhat similar to k-means), and the resultant jets are viewed as a proxy to the initial quarks and gluons that we can't measure
+* Jets are a common feature in high-energy particle collisions
+
+## {data-background="jets.png"}
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+> When two high-energy protons collide, the partons that compose them (here only quarks are depicted in green, red, and blue) can hit each other. Some of these partons (pink balls) can fly away and "hadronize", forming directional jets of energetic particles (white balls).
+
+## {data-background="cms-sixjets.png"}
+
+## The problem in a nutshell {data-background="gg-run177878-evt188723900-3d-nologo.jpg" data-state="background-blur-animation"}
+
+- Beams of energetic protons collide inside our detector
+- Quarks and gluons emerge and decay into collimated sprays of particles
+- Algorithms cluster these decay products into jets
+- For each jet, we'd like to know what initiated it
+- Was it a quark or a gluon?
+- Being able to accurately discriminate between quark- and gluon-initiated jets would be an extremely powerful tool in the search for new particles and new physics
+- This is an archetypal classification problem that might be amenable to machine learning
+
+
+## Machine learning & particle physics {data-background="neural.jpg" data-state="background-blur-animation"}
+
+* Machine learning is more or less what is commonly known in particle physics as multivariate analysis (MVA)
+* Used for many years but faced widespread scepticism
+* Use of multivariate pattern recognition algorithms was basically taboo in new particle searches until recently
+* Much prejudice against using what were considered "black box" selection algorithms
+* Artificial neural networks and Fisher discriminants (linear discriminant analysis) were used somewhat in the 1990's
+* Boosted Decision Trees (AdaBoost, 1996) is the favourite algorithm used for many analyses (1st use: 2004)
+<br>
+
+<small>[Successes, Challenges and Future Outlook of Multivariate Analysis In HEP](http://iopscience.iop.org/article/10.1088/1742-6596/608/1/012058/meta), Helge Voss, 2015 J. Phys.: Conf. Ser. 608 (2015) 012058; [Higgs Machine Learning Challenge visits CERN](http://indico.cern.ch/event/382895/), 19 May 2015, CERN; [Boosted Decision Trees as an Alternative to Artificial Neural Networks for Particle Identification](http://arxiv.org/abs/physics/0408124), Hai-Jun Yang *et al.*, Nucl.Instrum.Meth. A543 (2005) 577-584</small>
+
+
+## Data production pipeline
+
+* Use experiment's software to process Monte Carlo simulated data that contains lots of jets
+    - Insert my own C++ code to compute handcrafted features
+* Attach ground-truth class labels ("quark"/"gluon") to each jet
+    - There is significant *label noise* (mislabelled jets)
+    - Studies by others indicate the labelling procedure assigns the correct class for 90-95% of jets
+    - Some jets have no label assigned (labelling scheme failed)
+    - Different labelling schemes exist, but none are perfect because Monte Carlo simulation cannot perfectly simulate real data
+* Write-out data and convert for use in R using **RootTreeToR**
+
+
+## Cleaning data in R
+
+* **data.table** is extremely useful here:
+    - **fread** found to be at least twice as fast as other methods I tried for importing my data
+    - Helps me clean and filter my data and is super-fast, especially when using keys:
+  
+```
+setkey(DT, numTracks) # Set number of particle tracks to be the key
+DT <- DT[!.(1)] # Remove all single-track jets
+DT[, (bad.cols) := NULL] # Remove junk columns
+```
+
+* **dplyr** was invaluable for data analysis *dematryoshkafication*
+    - Data manipulation with dplyr mirrors the way we think about processing data: like on a production line, performing actions on an object sequentially in a stepwise manner
+    - Enables complex tasks to be constructed from simpler components that are glued together with the **%>%** operator
+
+
+## More data munging
+
+* To give me some extra space in RAM to work I used **SOAR** (stored object caches for R):
+
+```
+Sys.setenv(R_LOCAL_CACHE = "soar_cache")
+Store(DT) # data.table now stored as RData file on disk and out of RAM
+```
+
+* **caret** also provides some useful data-munging; I could reduce the size of my data by more than 50% with a conservative cut on correlations between features:
+
+```
+highly.correlated <- findCorrelation(
+  cor(DT[,-ncol(DT), with = FALSE], method = "pearson"),
+  cutoff = 0.95, names = TRUE)
+```
+
+* Removing duplicate and highly-correlated features was critical for enabling my data to fit in RAM
+
+```{r soar, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', cache=FALSE}
+require(SOAR)
+Sys.setenv(R_LOCAL_CACHE="soar_cache")
+Attach()
+```
+
+## Comparing different labelling schemes
+
+![Visualising all pairs of label relations between five different jet labelling schemes. Package: **circlize**.](chord-all-1.gif)
+
+## Label assignments that do not match
+
+![Visualising all pairs of label relations with unmatched label assignments between five different jet labelling schemes. We can use this to see how the schemes differ in sensitivity to underlying physics.](chord-mismatching-1.gif)
+
+## Missingness map of the complete dataset
+
+```{r missingness, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=4.5, fig.cap="Missingness map that shows features with missing values, zero values, or values below the machine epsilon. I used this information to filter the data. Package: **ggplot2**.", cache=TRUE}
+require(ggplot2)
+plot(ggMissingness)
+```
+
+
+## Visualising a correlation matrix as a force-directed network
+
+```{r qgraph, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=4.5, fig.cap="<small>Connection strength between features (nodes) is proportional to their correlation. Package: **qgraph**.</small>", cache=FALSE}
+
+require(qgraph)
+plot(Qp.cor)
+```
+
+## Dimensionality reduction: 
+### Principal Component Analysis
+
+```{r biplot, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=4.5, fig.cap="<small>Covariance biplot: lengths of loading vectors approximate standard deviations, cosines between vectors approximate correlations. Overlaid is 2D kernel density estimate showing where the different classes are distributed. Package: **ggbiplot**.</small>", cache=FALSE}
+
+require(png)
+require(grid)
+img <- readPNG("biplot-poly-cloud-1.png")
+grid.raster(img)
+```
+
+## Dimensionality reduction: 
+### t-Distributed Stochastic Neighbour Embedding
+
+```{r TSNE, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=4.5, fig.cap="<small>t-SNE has been used in a wide range of applications, so I expected it might be able to expose any hidden structure in the data. Package: **Rtsne**.</small>", cache=FALSE}
+
+require(png)
+require(grid)
+img <- readPNG("tSNE-poly-cloud-1.png")
+grid.raster(img)
+```
+
+
+## Dimensionality reduction: 
+### Deep learning autoencoder with ICA whitening
+
+```{r autoenc, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=4.5, fig.cap="<small>Architecture: 113--100--100--100--2--100--100--100--113. Tanh activation, 600 epochs, features were whitened with independent component analysis and standardised to be in [0, 1]. Package: **h2o**. Surprisingly fast!</small>", cache=FALSE}
+
+require(png)
+require(grid)
+img <- readPNG("plot-autoenc-whitened-poly-1.png")
+grid.raster(img)
+```
+
+## Feature ranking & selection
+
+- The question addressed by this work can be formally stated as follows: can we use quantitative characteristics of the jets to classify them as quark-jets or gluon-jets? 
+- This invites the question: how should we find the variables that provide the best discrimination?
+- We can use domain knowledge to drill down to what are believed to be the best discriminant features
+- How to optimally search the feature space?
+- Needed a *fast* method for feature selection to decrease model training time
+    * Used an entropy-based heuristic from **CORElearn** package to rank features
+
+
+## Fast feature selection
+
+* The usual methods provided for feature selection work well with small-sized data, but become impracticably slow for data of the size that is typical in HEP
+* It was necessary to devise a faster method
+* I adapted a filter-based method that involves ranking by *information gain* (Kullback–Leibler divergence)
+    - Information gain is based on the concept of entropy from information theory and is commonly used to decide which features to use when growing a decision tree
+* Basic idea: rank by this (or similar metric, *e.g.*, Gini impurity), and do this repeatedly for a large number of bootstrap resamplings from the data and average
+  - For each feature, we now have a nonparametric estimate of the mean and can calculate a confidence interval for that estimate
+
+
+##
+
+```{r infogain, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=6, fig.cap="<small>Distribution of information gain with 68% and 95% bootstrap-estimated confidence intervals for each feature. Package: **CORElearn, boot**.</small>", cache=FALSE}
+
+require(png)
+require(grid)
+img <- readPNG("infogain.png")
+grid.raster(img)
+```
+
+## 
+
+```{r best, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, fig.align='center', fig.height=6, fig.cap="<small>Distribution of a selection of highly-ranked features.</small>", cache=FALSE}
+
+require(png)
+require(grid)
+img <- readPNG("/home/andy/Dropbox/JetTagging/thePaper_files/figure-latex/best.png")
+grid.raster(img)
+```
+
+## Results
+
+* High degree of correlation between features, but some groups of features exist that are minimally correlated with each other
+* Correlations between features that might hint at common sensitivity to underlying physics
+* Dimensional reduction techniques indicate that there are no distinct clusters in the data, and it will be difficult to find an optimal decision boundary that separates the classes well
+* It appears that the features are probably not informative enough to provide clear discrimination
+* Probably a simple linear classifier might provide performance as good as we can get with this data
+* New features have been found that were hitherto unknown, and these show promise in helping us understand the physics involved in the quark and gluon decay process
+
+## Analysis workflow and documentation
+
+* It's often said that 80% of data analysis is spent on data munging --- this was certainly true in my case, and R has helped tremendously
+* The analysis has been performed entirely in R, and the journal paper is written in R Markdown and converted to intermediate TeX and PDF with **knitr**
+* This workflow has enabled me to develop the analysis interactively and keep track of what I have done, but then easily render the final document for publication in a simple one-step process
+* The idea is to make the analysis completely reproducible
+* R Markdown plays well with version control systems
+* To the best of my knowledge, nobody has done in this in particle physics before!
+* R has enabled me to do far more than I could have achieved using only the standard tools available to particle physicists
+
+
+## {data-background="pomi.jpg"}
+<h1>Thanks!</h1>
+
+> [https://www.linkedin.com/in/andrewjohnlowe](https://www.linkedin.com/in/andrewjohnlowe)
+
+
