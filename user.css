@@ -224,3 +224,7 @@ section {
 #mc_embed_signup .button:hover {
     background-color: #2165B6 !important;
 }
+
+.slides {
+    padding-left: 3px;
+}
